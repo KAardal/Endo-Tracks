@@ -19,3 +19,11 @@ userSchema.methods.passwordHashCreate = function(password){
       return this;
     });
 };
+
+userSchema.methods.passwordHashCompare = function(password){
+  return bcrypt.compare(password, this.passwordHash)
+    .then(isAMatch => {
+      if (isAMatch) return this;
+      throw new Error('unauthorized, password did not match');
+    });
+};
