@@ -27,3 +27,21 @@ userSchema.methods.passwordHashCompare = function(password){
       throw new Error('unauthorized, password did not match');
     });
 };
+
+userSchema.methods.tokenSeedCreate = function(){
+  new Promise((resolve, reject) => {
+    let attempts = 1;
+    let createSeed = function(){
+      this.tokenSeed = crypto.randomBytes(32).toString('hex');
+      console.log('this tokenSeed: ', this);
+      this.save()
+        .then(() => resolve(this))
+        .catch(() => {
+          if (attempts < 1) return reject(new Error('unauthorized, server couldn\'t create tokenSeed'));
+          attempts --;
+          createSeed();
+        });
+    };
+    createSeed();
+  });
+};
