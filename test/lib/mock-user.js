@@ -1,9 +1,9 @@
 'use strict';
 
 const faker = require('faker');
-const User = require('../../model/user.js')
+const User = require('../../model/user.js');
 
-const mockUser = module.exports = {}
+const mockUser = module.exports = {};
 
 mockUser.mockOne = () => {
   let result = {};
