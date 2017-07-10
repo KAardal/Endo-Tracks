@@ -5,7 +5,7 @@ require('dotenv').config({path: `${__dirname}/../.test.env`});
 const superagent = require('superagent');
 const expect = require('expect');
 
-// const clearDB = require('./lib/clear-db.js');
+const clearDB = require('./lib/clear-db.js');
 // const mockUser = require('./lib/mock-user.js');
 const server = require('../lib/server.js');
 
@@ -14,7 +14,8 @@ const APP_URL = process.env.APP_URL;
 describe('Testing /api/users routes', () => {
   before(server.start);
   after(server.stop);
-  // afterEach(clearDB);
+  afterEach(clearDB);
+
   describe('Testing POST /api/users route', () => {
     describe('If successful', () => {
       it('it should respond 200 and a new user', () => {
