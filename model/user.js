@@ -2,6 +2,9 @@
 
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
+const crypto = require('crypto');
+const jwt = require('jsonwebtoken');
+const APP_SECRET = process.env.APP_SECRET;
 
 const userSchema = mongoose.Schema({
   passwordHash: {type: String, required: true},
@@ -10,7 +13,6 @@ const userSchema = mongoose.Schema({
   tokenSeed: {type: String, required: true, unique: true},
 });
 
-module.exports = mongoose.model('user', userSchema);
 
 userSchema.methods.passwordHashCreate = function(password){
   return bcrypt.hash(password, 8)
@@ -44,4 +46,25 @@ userSchema.methods.tokenSeedCreate = function(){
     };
     createSeed();
   });
+};
+
+userSchema.methods.tokenCreate = function(){
+  return this.tokenSeedCreate()
+    .then(() => {
+      let token = jwt.sign({tokenSeed: this.tokenSeed}, APP_SECRET);
+      return token;
+    })
+    .catch(() => {return new Error('unauthorized, token failed to be generated');}
+    );
+};
+
+
+const User = module.exports = mongoose.model('user', userSchema);
+
+User.create = (data) => {
+  let password = data.password;
+  delete data.password;
+  return new User(data)
+    .passwordHashCreate(password)
+    .then(newUser => newUser.tokenCreate());
 };
