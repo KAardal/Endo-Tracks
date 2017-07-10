@@ -1,7 +1,6 @@
 'use strict';
 
 const mongoose = require('mongoose');
-const APP_SECRET = process.env.APP_SECRET;
 const bcrypt = require('bcrypt');
 
 const userSchema = mongoose.Schema({
