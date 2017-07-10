@@ -1,12 +1,12 @@
-'use strict';
-
-const {Router} = require('express');
-const s3Uplaod = require('../lib/s3-upload-middleware.js');
-const bearerAuth = require('../lib/bearer-auth-middleware.js');
-const User = require('../model/user.js');
-
-const userRouter = module.expoerts = new Router();
-userRouter.post('/api/users', bearerAuth,)
+// 'use strict';
+//
+// const {Router} = require('express');
+// const s3Uplaod = require('../lib/s3-upload-middleware.js');
+// const bearerAuth = require('../lib/bearer-auth-middleware.js');
+// const User = require('../model/user.js');
+//
+// const userRouter = module.expoerts = new Router();
+// userRouter.post('/api/users', bearerAuth,)
 
 
 
