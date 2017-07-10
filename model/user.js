@@ -1,6 +1,7 @@
 'use strict';
 
 const mongoose = require('mongoose');
+const APP_SECRET = process.env.APP_SECRET;
 
 const userSchema = mongoose.Schema({
   passwordHash: {type: String, required: true},
@@ -12,5 +13,5 @@ const userSchema = mongoose.Schema({
 module.exports = mongoose.model('user', userSchema);
 
 userSchema.methods.passwordHashCreate = function(password){
-  
-}:
+
+};
