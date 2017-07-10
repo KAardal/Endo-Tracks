@@ -2,6 +2,9 @@
 
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
+const crypto = require('crypto');
+const jwt = require('jsonwebtoken');
+const APP_SECRET = process.env.APP_SECRET;
 
 const userSchema = mongoose.Schema({
   passwordHash: {type: String, required: true},
@@ -44,4 +47,14 @@ userSchema.methods.tokenSeedCreate = function(){
     };
     createSeed();
   });
+};
+
+userSchema.methods.tokenCreate = function(){
+  return this.tokenSeedCreate()
+    .then(seed => {
+      let token = jwt.sign(seed, APP_SECRET);
+      return token;
+    })
+    .catch(() => {return new Error('unauthorized, token failed to be generated');}
+    );
 };
