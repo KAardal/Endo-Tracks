@@ -2,6 +2,7 @@
 
 const mongoose = require('mongoose');
 const APP_SECRET = process.env.APP_SECRET;
+const bcrypt = require('bcrypt');
 
 const userSchema = mongoose.Schema({
   passwordHash: {type: String, required: true},
@@ -13,5 +14,9 @@ const userSchema = mongoose.Schema({
 module.exports = mongoose.model('user', userSchema);
 
 userSchema.methods.passwordHashCreate = function(password){
-
+  return bcrypt.hash(password, 8)
+    .then(hash => {
+      this.passwordHash = hash;
+      return this;
+    });
 };
