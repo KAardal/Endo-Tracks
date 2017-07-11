@@ -1,6 +1,10 @@
 
 # Created by https://www.gitignore.io/api/osx,node,linux,windows,database
 
+temp-assets
+.test.env
+.env
+
 ### Database ###
 *.accdb
 *.db
