@@ -9,7 +9,7 @@ const clearDB = require('./lib/clear-db.js');
 const mockUser = require('./lib/mock-user.js');
 // const mockTrail = require('./lib/mock-.js');
 // const mockAWS = require('./lib/mock-aws.js');
-// const mockComment = require('./lb/mock-comment.js');
+// const mockComment = require('./lib/mock-comment.js');
 const APP_URL = process.env.APP_URL;
 
 let tempUserData;
@@ -23,7 +23,7 @@ describe('testing trail router', () => {
     it('should respond with a trail', () => {
       return mockUser.mockOne()
         .then(userData => {
-          console.log('userData XXXXXXXXXX', userData);
+          console.log('XXXXXXX token', userData.user.token);
           tempUserData = userData;
           return superagent.post(`${APP_URL}/api/trails`)
             .set('Authorization', `Bearer ${tempUserData.user.token}`)

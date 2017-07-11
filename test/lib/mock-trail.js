@@ -18,4 +18,13 @@ mockTrail.mockOne = () => {
     zoom: 3,
     comments: [],
   });
+  .passwordHashCreate(result.password)
+.then(user => {
+  result.user = user;
+  return user.tokenCreate();
+})
+.then(token => {
+  result.token = token;
+  return result;
+});
 };

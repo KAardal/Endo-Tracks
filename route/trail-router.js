@@ -1,12 +1,12 @@
 'use strict';
 
 const {Router} = require('express');
-const s3Upload = require('../lib/s3-upload-middleware');
-const bearerAuth = require('../lib/bearer');
+const s3Upload = require('../lib/s3-upload-middleware.js');
+const bearerAuth = require('../lib/bearer-auth-middleware.js');
 // const User = require('../model/user.js');
 // const jsonParser = require('body-parser');
 
-const trailRouter = module.expoerts = new Router();
+const trailRouter = module.exports = new Router();
 
 trailRouter.post('/api/trails', bearerAuth, s3Upload('image'),
   (req, res, next) => {
