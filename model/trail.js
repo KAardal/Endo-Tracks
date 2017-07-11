@@ -15,7 +15,7 @@ const trailSchema = mongoose.Schema ({
   lat: {type: String, required: true, unique: true},
   long: {type: String, required: true, unique: true},
   zoom: {type: String, required: true, unique: true},
-  comments: [{type: mongoose.Schema.Types.ObjectId, ref: 'comment' }],
+  comments: [{type: mongoose.Schema.Types.ObjectId, ref: 'comment'}],
 });
 
 module.exports = mongoose.model('trail', trailSchema);
