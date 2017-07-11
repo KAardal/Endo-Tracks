@@ -45,5 +45,41 @@ describe('Testing /api/users routes', () => {
           });
       });
     });
+    describe('If passing in bad password content', () => {
+      it('it should respond 400 status', () => {
+        return superagent.post(`${APP_URL}/api/users`)
+          .send({userName: `test username`, password: 123, email: `user@example.com`})
+          .catch(err => {
+            expect(err.status).toEqual(400);
+          });
+      });
+    });
+    describe('If passing in not enough fields', () => {
+      it('it should respond 400 status', () => {
+        return superagent.post(`${APP_URL}/api/users`)
+          .send({userName: `test username`, email: `user@example.com`})
+          .catch(err => {
+            expect(err.status).toEqual(400);
+          });
+      });
+    });
+    describe('If passing in no content', () => {
+      it('it should respond 400 status', () => {
+        return superagent.post(`${APP_URL}/api/users`)
+          .send({})
+          .catch(err => {
+            expect(err.status).toEqual(400);
+          });
+      });
+    });
+    describe('If requesting to a bad pathname', () => {
+      it('it should respond 404 status', () => {
+        return superagent.post(`${APP_URL}/api/notapath`)
+          .send({userName: 'test user', password: `user password`, email: `user@example.com`})
+          .catch(err => {
+            expect(err.status).toEqual(404);
+          });
+      });
+    });
   });
 });
