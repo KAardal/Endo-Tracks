@@ -8,7 +8,7 @@ const APP_SECRET = process.env.APP_SECRET;
 
 const userSchema = mongoose.Schema({
   passwordHash: {type: String, required: true},
-  userName: {type: String, required: true, unique: true},
+  userName: {type: String, required: true, unique: true, minlength: 2},
   email: {type: String, required: true, unique: true},
   tokenSeed: {type: String, required: true, unique: true},
 });
@@ -61,6 +61,7 @@ userSchema.methods.tokenCreate = function(){
 const User = module.exports = mongoose.model('user', userSchema);
 
 User.create = (data) => {
+  console.log('type of: ', typeof data.userName);
   let password = data.password;
   delete data.password;
   return new User(data)

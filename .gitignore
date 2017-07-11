@@ -1,6 +1,8 @@
 
 # Created by https://www.gitignore.io/api/osx,node,linux,windows,database
 
+temp-assets
+
 ### Database ###
 *.accdb
 *.db
@@ -91,7 +93,7 @@ package-lock.json
 
 # dotenv environment variables file
 .env
-
+.test.env
 
 ### OSX ###
 *.DS_Store
@@ -140,9 +142,5 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
-
-# ENV VARIABLES
-.env
-.test.env
 
 # End of https://www.gitignore.io/api/osx,node,linux,windows,database
