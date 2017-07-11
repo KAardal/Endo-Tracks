@@ -4,11 +4,11 @@ require('dotenv').config({path: `${__dirname}/../.test.env`});
 
 const expect = require('expect');
 const superagent = require ('superagent');
+require('./lib/mock-aws.js');
 const server = require('../lib/server.js');
 const clearDB = require('./lib/clear-db.js');
 const mockUser = require('./lib/mock-user.js');
 // const mockTrail = require('./lib/mock-.js');
-// const mockAWS = require('./lib/mock-aws.js');
 // const mockComment = require('./lib/mock-comment.js');
 const APP_URL = process.env.APP_URL;
 
@@ -20,25 +20,27 @@ describe('testing trail router', () => {
   afterEach(clearDB);
 
   describe('testing POST /api/trails', () => {
-    it('should respond with a trail', () => {
+    it.only('should respond with a trail', () => {
       return mockUser.mockOne()
         .then(userData => {
-          console.log('XXXXXXX token', userData.user.token);
+          console.log('XXXXXXX token', userData.token);
           tempUserData = userData;
           return superagent.post(`${APP_URL}/api/trails`)
-            .set('Authorization', `Bearer ${tempUserData.user.token}`)
-            .send({
-              trailName: 'example trail name',
-              difficulty:  'example difficulty',
-              type: 'example type',
-              distance: 'example distance',
-              elevation: 'example elevation',
-              lat: 'number between -90 and 90',
-              long: 'number between -180 and 180',
-              zoom: 'number between 0 - 21',
-              comment: 'example comments',
-              mapURI: `${__dirname}/assets/map.png`,
-            });
+            .set('Authorization', `Bearer ${tempUserData.token}`)
+            .field('trailName', 'name')
+            .attach('image', `${__dirname}/assets/map.png`);
+          // .send({
+          //   trailName: 'example trail name',
+          //   difficulty: 'example difficulty',
+          //   type: 'example type',
+          //   distance: 'example distance',
+          //   elevation: 'example elevation',
+          //   lat: 'number between -90 and 90',
+          //   long: 'number between -180 and 180',
+          //   zoom: 'number between 0 - 21',
+          //   comment: 'example comments',
+          //   mapURI: `${__dirname}/assets/map.png`,
+          // });
         })
         .then(res => {
           console.log('POST YYYYYYYYYY res.body', res.body);
@@ -51,7 +53,7 @@ describe('testing trail router', () => {
           expect(res.body.lat).toEqual('trail lat');
           expect(res.body.long).toEqual('trail long');
           expect(res.body.zoom).toEqual('trail zoom');
-          expect(res.body.mapURI).toExist();
+          // expect(res.body.mapURI).toExist();
           expect(res.body.userID).toEqual(tempUserData.user._id.toString());
         });
     });
@@ -67,7 +69,7 @@ describe('testing trail router', () => {
 
     it('should respond with a 401', () => {
       return superagent.post(`${APP_URL}/api/trails`)
-        .set({Authorization: 'Bad Token'})
+        .set('authorization', 'Bearer BadToken')
         .send({
           trailName: 'example trail name',
           difficulty:  'example difficulty',
@@ -90,7 +92,7 @@ describe('testing trail router', () => {
         .then(userData => {
           tempUserData = userData;
           return superagent.post(`${APP_URL}/api/trails`)
-            .set('Authorization', `Bearer ${tempUserData.user.token}`)
+            .set('authorization', `Bearer ${tempUserData.user.token}`)
             .send({})
             .catch(err => {
               expect(err.status).toEqual(400);

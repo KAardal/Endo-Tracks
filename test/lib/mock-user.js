@@ -20,6 +20,7 @@ mockUser.mockOne = () => {
     })
     .then(token => {
       result.token = token;
+      console.log('OOOOOOOOOO token in mock user', token);
       return result;
     });
 };

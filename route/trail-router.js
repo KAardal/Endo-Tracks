@@ -3,6 +3,7 @@
 const {Router} = require('express');
 const s3Upload = require('../lib/s3-upload-middleware.js');
 const bearerAuth = require('../lib/bearer-auth-middleware.js');
+const Trail = require('../model/trail.js');
 // const User = require('../model/user.js');
 // const jsonParser = require('body-parser');
 
@@ -10,9 +11,9 @@ const trailRouter = module.exports = new Router();
 
 trailRouter.post('/api/trails', bearerAuth, s3Upload('image'),
   (req, res, next) => {
-    console.log('hit POST /api/trials');
+    console.log('hit POST /api/trails');
 
-    new Map({
+    new Trail({
       trailName: req.body.trailName,
       mapURI: req.body.mapURI,
       difficulty: req.body.difficulty,
