@@ -19,8 +19,3 @@ const trailSchema = mongoose.Schema ({
 });
 
 module.exports = mongoose.model('trail', trailSchema);
-
-
-POST;
-GET;
-PUT;
