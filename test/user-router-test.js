@@ -27,5 +27,23 @@ describe('Testing /api/users routes', () => {
           });
       });
     });
+    describe('If passing in bad email content', () => {
+      it('it should respond 400 status', () => {
+        return superagent.post(`${APP_URL}/api/users`)
+          .send({userName: 'test user', password: `user password`, email: `useratexample.com`})
+          .catch(err => {
+            expect(err.status).toEqual(400);
+          });
+      });
+    });
+    describe('If passing in bad username content', () => {
+      it('it should respond 400 status', () => {
+        return superagent.post(`${APP_URL}/api/users`)
+          .send({userName: 123, password: `user password`, email: `user@example.com`})
+          .catch(err => {
+            expect(err.status).toEqual(400);
+          });
+      });
+    });
   });
 });
