@@ -51,25 +51,27 @@ describe('testing trail router', () => {
           expect(res.body.mapURI).toExist();
           expect(res.body.userID).toEqual(tempUserData.user._id.toString());
         });
-
-      it('should respond with a 401', () => {
-        return superagent.post(`${API_URL}/api/trails`)
-          .send()
-          .catch(err => {
-            expect(err.status).toEqual(401);
-          });
-      });
-      it('should respond with a 400', () => {
-        return mockUser.createOne()
-          .then(userData => {
-            tempUserData = userData;
-            return superagent.post(`${API_URL}/api/maps`)
-              .set('Authorization', `Bearer ${tempUserData.token}`)
-              .catch(err => {
-                expect(err.status).toEqual(400);
-              });
-          });
-      });
     });
+
+    it('should respond with a 401', () => {
+      return superagent.post(`${API_URL}/api/trails`)
+        .send()
+        .catch(err => {
+          expect(err.status).toEqual(401);
+        });
+    });
+
+    it('should respond with a 400', () => {
+      return mockUser.createOne()
+        .then(userData => {
+          tempUserData = userData;
+          return superagent.post(`${API_URL}/api/maps`)
+            .set('Authorization', `Bearer ${tempUserData.token}`)
+            .catch(err => {
+              expect(err.status).toEqual(400);
+            });
+        });
+    });
+    
   });
 });
