@@ -8,7 +8,7 @@ const APP_SECRET = process.env.APP_SECRET;
 
 const userSchema = mongoose.Schema({
   passwordHash: {type: String, required: true},
-  userName: {type: String, required: true, unique: true},
+  userName: {type: String, required: true, unique: true, minlength: 2},
   email: {type: String, required: true, unique: true},
   tokenSeed: {type: String, required: true, unique: true},
 });
