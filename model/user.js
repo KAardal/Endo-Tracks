@@ -31,11 +31,10 @@ userSchema.methods.passwordHashCompare = function(password){
 };
 
 userSchema.methods.tokenSeedCreate = function(){
-  new Promise((resolve, reject) => {
+  return new Promise((resolve, reject) => {
     let attempts = 1;
-    let createSeed = function(){
+    let createSeed = () => {
       this.tokenSeed = crypto.randomBytes(32).toString('hex');
-      console.log('this tokenSeed: ', this);
       this.save()
         .then(() => resolve(this))
         .catch(() => {

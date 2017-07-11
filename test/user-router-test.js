@@ -22,12 +22,8 @@ describe('Testing /api/users routes', () => {
         return superagent.post(`${APP_URL}/api/users`)
           .send({userName: `test user`, password: `user password`, email: `user@example.com`})
           .then(res => {
-            console.log('res.body: ', res.body);
             expect(res.status).toEqual(200);
-            expect(res.body.userName).toEqual('test user');
-            expect(res.body.email).toEqual('user@example.com');
-            expect(res.body.passwordHash).toExist();
-            expect(res.tokenSeed).toExist();
+            expect(res.text).toExist();
           });
       });
     });

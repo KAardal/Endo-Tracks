@@ -3,7 +3,7 @@
 const {Router} = require('express');
 const basicAuth = require('../lib/basic-auth-middleware.js');
 const User = require('../model/user.js');
-const jsonParser = require('body-parser');
+const jsonParser = require('body-parser').json();
 
 const userRouter = module.exports = new Router();
 userRouter.post('/api/users', jsonParser, (req, res, next) => {
