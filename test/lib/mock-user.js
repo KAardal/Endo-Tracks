@@ -6,6 +6,7 @@ const User = require('../../model/user.js');
 const mockUser = module.exports = {};
 
 mockUser.mockOne = () => {
+  console.log('hit mock one');
   let result = {};
   result.password = faker.internet.password();
   return new User({
@@ -15,7 +16,7 @@ mockUser.mockOne = () => {
     .passwordHashCreate(result.password)
     .then(user => {
       result.user = user;
-      return user.tokenCreate;
+      return user.tokenCreate();
     })
     .then(token => {
       result.token = token;
