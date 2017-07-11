@@ -170,18 +170,4 @@ describe('Testing /api/users routes', () => {
       });
     });
   });
-  describe('Testing mockUser to simulate a POST route to create a new profile', () => {
-    it.only('it should return with a profile on the tempUser', () => {
-      let tempUser;
-      return mockUser.mockOne()
-        .then(user => {
-          tempUser = user;
-          console.log('tempuser: ', tempUser);
-        })
-        .then(res => {
-          expect(res.profile._id).toEqual(tempUser._id);
-          expect(res.profile.userName).toEqual(tempUser.user.userName);
-        });
-    });
-  });
 });
