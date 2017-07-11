@@ -13,13 +13,13 @@ const userSchema = mongoose.Schema({
   tokenSeed: {type: String, required: true, unique: true},
 });
 
-
 userSchema.methods.passwordHashCreate = function(password){
   return bcrypt.hash(password, 8)
     .then(hash => {
       this.passwordHash = hash;
       return this;
-    });
+    })
+    .catch(err => console.log('err', err.message));
 };
 
 userSchema.methods.passwordHashCompare = function(password){
