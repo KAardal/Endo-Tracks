@@ -62,13 +62,19 @@ userSchema.methods.tokenCreate = function(){
 const User = module.exports = mongoose.model('user', userSchema);
 
 User.create = (data) => {
-  console.log('type of: ', typeof data.userName);
   let password = data.password;
   delete data.password;
   return new User(data)
     .passwordHashCreate(password)
     .then(newUser => {
-      new Profile(newUser._id, newUser.userName);
+      console.log('newUser id: ', newUser._id);
+      console.log('newUser name: ', newUser.userName);
+      let profileData = {
+        userID: newUser._id,
+        userName: newUser.userName,
+      };
+      new Profile(profileData)
+        .save();
       return newUser;
     })
     .then(newUser => newUser.tokenCreate());
