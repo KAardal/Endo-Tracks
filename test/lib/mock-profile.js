@@ -14,8 +14,8 @@ mockProfile.mockOne = () => {
     password: faker.internet.password(),
   })
     .then(user => {
+      console.log('user mock: ', user);
       result.user = user;
-      console.log('user mock prof: ', user);
       return result;
     });
 };

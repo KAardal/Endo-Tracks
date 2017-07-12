@@ -67,8 +67,6 @@ User.create = (data) => {
   return new User(data)
     .passwordHashCreate(password)
     .then(newUser => {
-      console.log('newUser id: ', newUser._id);
-      console.log('newUser name: ', newUser.userName);
       let profileData = {
         userID: newUser._id,
         userName: newUser.userName,
