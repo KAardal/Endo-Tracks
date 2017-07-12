@@ -21,7 +21,7 @@ describe('testing trail router', () => {
   afterEach(clearDB);
 
   describe('testing POST /api/trails', () => {
-    it.only('should respond with a trail', () => {
+    it('should respond with a trail', () => {
       return mockUser.mockOne()
         .then(userData => {
           tempUserData = userData;
