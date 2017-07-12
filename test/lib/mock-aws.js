@@ -1,8 +1,10 @@
 'use strict';
 
 const awsMock = require('aws-sdk-mock');
+console.log('outside mock-aws');
 
 awsMock.mock('S3', 'upload', function(params, callback) {
+  console.log('mock-aws');
 
   if(!params.Key) return callback(new Error('must have a key'));
   if(!params.Body) return callback(new Error('must have a body'));

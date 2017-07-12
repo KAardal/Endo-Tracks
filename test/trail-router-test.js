@@ -4,6 +4,7 @@ require('dotenv').config({path: `${__dirname}/../.test.env`});
 
 const expect = require('expect');
 const superagent = require ('superagent');
+
 require('./lib/mock-aws.js');
 const server = require('../lib/server.js');
 const clearDB = require('./lib/clear-db.js');
@@ -20,12 +21,12 @@ describe('testing trail router', () => {
   afterEach(clearDB);
 
   describe('testing POST /api/trails', () => {
-    it('should respond with a trail', () => {
+    it.only('should respond with a trail', () => {
       return mockUser.mockOne()
         .then(userData => {
           tempUserData = userData;
           return superagent.post(`${APP_URL}/api/trails`)
-            .set('Authorization', `Bearer ${tempUserData.token}`)
+            .set('authorization', `Bearer ${tempUserData.token}`)
             .field('trailName', 'trail name')
             .field('difficulty','difficulty')
             .field('type', 'type')
