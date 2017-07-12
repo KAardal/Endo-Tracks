@@ -15,7 +15,7 @@ trailRouter.post('/api/trails', bearerAuth, s3Upload('image'),
 
     new Trail({
       trailName: req.body.trailName,
-      mapURI: req.body.mapURI,
+      mapURI: req.s3Data.Location,
       difficulty: req.body.difficulty,
       type: req.body.type,
       distance: req.body.distance,

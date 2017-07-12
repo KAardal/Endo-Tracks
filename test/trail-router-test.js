@@ -8,7 +8,7 @@ require('./lib/mock-aws.js');
 const server = require('../lib/server.js');
 const clearDB = require('./lib/clear-db.js');
 const mockUser = require('./lib/mock-user.js');
-// const mockTrail = require('./lib/mock-.js');
+// const mockTrail = require('./lib/mock-.trail.js');
 // const mockComment = require('./lib/mock-comment.js');
 const APP_URL = process.env.APP_URL;
 
@@ -20,41 +20,37 @@ describe('testing trail router', () => {
   afterEach(clearDB);
 
   describe('testing POST /api/trails', () => {
-    it.only('should respond with a trail', () => {
+    it('should respond with a trail', () => {
       return mockUser.mockOne()
         .then(userData => {
           console.log('XXXXXXX token', userData.token);
           tempUserData = userData;
           return superagent.post(`${APP_URL}/api/trails`)
             .set('Authorization', `Bearer ${tempUserData.token}`)
-            .field('trailName', 'name')
+            .field('trailName', 'some shit')
+            .field('difficulty','difficulty')
+            .field('type', 'type')
+            .field('distance', 'distance')
+            .field('elevation','elevation')
+            .field('lat','number1')
+            .field('long', 'number2')
+            .field('zoom', 'number3')
             .attach('image', `${__dirname}/assets/map.png`);
-          // .send({
-          //   trailName: 'example trail name',
-          //   difficulty: 'example difficulty',
-          //   type: 'example type',
-          //   distance: 'example distance',
-          //   elevation: 'example elevation',
-          //   lat: 'number between -90 and 90',
-          //   long: 'number between -180 and 180',
-          //   zoom: 'number between 0 - 21',
-          //   comment: 'example comments',
-          //   mapURI: `${__dirname}/assets/map.png`,
-          // });
         })
         .then(res => {
           console.log('POST YYYYYYYYYY res.body', res.body);
+          console.log('res.body', res.body);
           expect(res.status).toEqual(200);
-          expect(res.body.trailName).toEqual('new trail name');
-          expect(res.body.difficulty).toEqual('trail difficulty');
-          expect(res.body.type).toEqual('trail type');
-          expect(res.body.distance).toEqual('trail distance');
-          expect(res.body.elevation).toEqual('trail elevation');
-          expect(res.body.lat).toEqual('trail lat');
-          expect(res.body.long).toEqual('trail long');
-          expect(res.body.zoom).toEqual('trail zoom');
-          // expect(res.body.mapURI).toExist();
-          expect(res.body.userID).toEqual(tempUserData.user._id.toString());
+          expect(res.body.trailName).toEqual('some shit');
+          expect(res.body.difficulty).toEqual('difficulty');
+          expect(res.body.type).toEqual('type');
+          expect(res.body.distance).toEqual('distance');
+          expect(res.body.elevation).toEqual('elevation');
+          expect(res.body.lat).toEqual('number1');
+          expect(res.body.long).toEqual('number2');
+          expect(res.body.zoom).toEqual('number3');
+          expect(res.body.mapURI).toExist();
+          expect(res.body._id).toExist();
         });
     });
 

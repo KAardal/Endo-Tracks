@@ -6,15 +6,15 @@ const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 
 const trailSchema = mongoose.Schema ({
-  trailName: {type: String, required: false, unique: true},
-  mapURI: {type: String, required: false, unique: true},
-  difficulty: {type: String, required: false, unique: true},
-  type: {type: String, required: false, unique: true},
-  distance: {type: String, required: false, unique: true},
-  elevation: {type: String, required: false, unique: true},
-  lat: {type: String, required: false, unique: true},
-  long: {type: String, required: false, unique: true},
-  zoom: {type: String, required: false, unique: true},
+  trailName: {type: String, required: true, unique: true},
+  mapURI: {type: String, required: true, unique: true},
+  difficulty: {type: String, required: true, unique: true},
+  type: {type: String, required: true, unique: true},
+  distance: {type: String, required: true, unique: true},
+  elevation: {type: String, required: true, unique: true},
+  lat: {type: String, required: true, unique: true},
+  long: {type: String, required: true, unique: true},
+  zoom: {type: String, required: true, unique: true},
   comments: [{type: mongoose.Schema.Types.ObjectId, ref: 'comment'}],
 });
 
