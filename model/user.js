@@ -1,9 +1,10 @@
 'use strict';
 
-const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const crypto = require('crypto');
+const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
+const Profile = require('./profile.js');
 const APP_SECRET = process.env.APP_SECRET;
 
 const userSchema = mongoose.Schema({
@@ -61,10 +62,20 @@ userSchema.methods.tokenCreate = function(){
 const User = module.exports = mongoose.model('user', userSchema);
 
 User.create = (data) => {
-  console.log('type of: ', typeof data.userName);
   let password = data.password;
   delete data.password;
   return new User(data)
     .passwordHashCreate(password)
+    .then(newUser => {
+      console.log('newUser id: ', newUser._id);
+      console.log('newUser name: ', newUser.userName);
+      let profileData = {
+        userID: newUser._id,
+        userName: newUser.userName,
+      };
+      new Profile(profileData)
+        .save();
+      return newUser;
+    })
     .then(newUser => newUser.tokenCreate());
 };

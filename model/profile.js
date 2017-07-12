@@ -10,15 +10,4 @@ const profileSchema = mongoose.Schema({
   photoURI: {type: String},
 });
 
-const Profile = module.exports = mongoose.model('profile', profileSchema);
-
-Profile.initCreate = (id, name) => {
-  let userData = {
-    userID: id,
-    userName: name,
-    skillLevel: '',
-    ridingStyle: '',
-    photoURI: '',
-  };
-  return new Profile(userData);
-};
+module.exports = mongoose.model('profile', profileSchema);
