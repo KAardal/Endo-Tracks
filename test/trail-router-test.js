@@ -26,7 +26,7 @@ describe('testing trail router', () => {
           tempUserData = userData;
           return superagent.post(`${APP_URL}/api/trails`)
             .set('Authorization', `Bearer ${tempUserData.token}`)
-            .field('trailName', 'some shit')
+            .field('trailName', 'trail name')
             .field('difficulty','difficulty')
             .field('type', 'type')
             .field('distance', 'distance')
@@ -38,7 +38,7 @@ describe('testing trail router', () => {
         })
         .then(res => {
           expect(res.status).toEqual(200);
-          expect(res.body.trailName).toEqual('some shit');
+          expect(res.body.trailName).toEqual('trail name');
           expect(res.body.difficulty).toEqual('difficulty');
           expect(res.body.type).toEqual('type');
           expect(res.body.distance).toEqual('distance');

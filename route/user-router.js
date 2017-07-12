@@ -28,7 +28,6 @@ userRouter.get('/api/users/login', basicAuth, (req, res, next) => {
   console.log('req.user: ', req.user);
   req.user.tokenCreate()
     .then(token => {
-      console.log('token from get: ', token);
       res.send(token);
     })
     .catch(next);
