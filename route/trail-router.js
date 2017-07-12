@@ -9,23 +9,22 @@ const Trail = require('../model/trail.js');
 
 const trailRouter = module.exports = new Router();
 
-trailRouter.post('/api/trails', bearerAuth, s3Upload('image'),
-  (req, res, next) => {
-    console.log('hit POST /api/trails');
+trailRouter.post('/api/trails', bearerAuth, s3Upload('image'), (req, res, next) => {
+  console.log('hit POST /api/trails');
 
-    new Trail({
-      trailName: req.body.trailName,
-      mapURI: req.s3Data.Location,
-      difficulty: req.body.difficulty,
-      type: req.body.type,
-      distance: req.body.distance,
-      elevation: req.body.elevation,
-      lat: req.body.lat,
-      long: req.body.long,
-      zoom: req.body.zoom,
-      comments: [],
-    })
-      .save()
-      .then(map => res.json(map))
-      .catch(next);
-  });
+  new Trail({
+    trailName: req.body.trailName,
+    mapURI: req.s3Data.Location,
+    difficulty: req.body.difficulty,
+    type: req.body.type,
+    distance: req.body.distance,
+    elevation: req.body.elevation,
+    lat: req.body.lat,
+    long: req.body.long,
+    zoom: req.body.zoom,
+    comments: [],
+  })
+    .save()
+    .then(map => res.json(map))
+    .catch(next);
+});

@@ -1,6 +1,7 @@
 'use strict';
 
 require('dotenv').config({path: `${__dirname}/../.test.env`});
+require('./lib/mock-aws.js');
 
 const superagent = require('superagent');
 const expect = require('expect');
@@ -19,7 +20,7 @@ describe('Testing Profile /api/profiles routes', () => {
 
   describe('Testing GET /api/profiles route', () => {
     describe('If the successful', () => {
-      it.only('It should return a sepific user profile', () => {
+      it('It should return a sepific user profile', () => {
         let tempUser;
         return mockProfile.mockOne()
           .then(user => {
