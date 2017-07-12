@@ -18,8 +18,8 @@ describe('Testing Profile /api/profiles routes', () => {
   afterEach(clearDB);
 
   describe('Testing GET /api/profiles route', () => {
-    describe('If the get is successful', () => {
-      it.only('It should return all profiles', () => {
+    describe('If the get multiple is successful', () => {
+      it('It should return all profiles', () => {
         return mockProfile.mockMultiple(10)
           .then(() =>
             superagent.get(`${APP_URL}/api/profiles`)
@@ -50,6 +50,23 @@ describe('Testing Profile /api/profiles routes', () => {
                 expect(res.body[0].userName).toEqual(userData['userName']);
                 expect(res.body[0]._id).toExist();
                 expect(res.body[0].userID).toExist();
+              });
+          });
+      });
+    });
+    describe('If passing in a bad username', () => {
+      it('It should return a 404', () => {
+        let userData = {
+          userName: `dingo`,
+          password: `user password`,
+          email: `user@example.com`,
+        };
+        return User.create(userData)
+          .then(() => {
+            return superagent.get(`${APP_URL}/api/profiles`)
+              .send({userName: `badusername`})
+              .catch(err => {
+                expect(err.status).toEqual(404);
               });
           });
       });

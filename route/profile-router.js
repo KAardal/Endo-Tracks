@@ -8,18 +8,19 @@ const profileRouter = module.exports = new Router();
 
 profileRouter.get('/api/profiles', jsonParser, (req, res, next) => {
   console.log('Hit profile get route');
-  console.log('req.body: ', req.body);
+
   if (req.body.userName) {
-    return Profile.find(req.body.userName)
-      .then(profile => res.send(profile))
-      .catch(() => new Error('not found: no profile by that username'));
+    return Profile.find({userName: req.body.userName})
+      .then(profile => {
+        if (profile.length < 1) return next(new Error('not found: no profile by that username'));
+
+        return res.send(profile);
+      });
   }
-  console.log('break 1');
-  console.log('break 2');
   return Profile.find({})
     .then(profiles => {
-      console.log('profiles: ', profiles);
+      if (profiles.length < 1) return next(new Error('not found: no profiles exist'));
+
       return res.send(profiles);
-    })
-    .catch(next);
+    });
 });
