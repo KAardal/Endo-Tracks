@@ -20,7 +20,7 @@ userSchema.methods.passwordHashCreate = function(password){
       this.passwordHash = hash;
       return this;
     })
-    .catch(err => console.log('err', err.message));
+    .catch(() => {return new Error('unauthorized: hash wasn\'t created');});
 };
 
 userSchema.methods.passwordHashCompare = function(password){

@@ -7,7 +7,7 @@ const jsonParser = require('body-parser').json();
 
 const userRouter = module.exports = new Router();
 userRouter.post('/api/users/signup', jsonParser, (req, res, next) => {
-  console.log('hit post /api/users/signup');
+  console.log('hit POST /api/users/signup route');
 
   let keys = Object.keys(req.body).length;
   if (keys < 3) return next(new Error('no req body, please fill out all fields'));
@@ -24,11 +24,9 @@ userRouter.post('/api/users/signup', jsonParser, (req, res, next) => {
 });
 
 userRouter.get('/api/users/login', basicAuth, (req, res, next) => {
-  console.log('hit get /api/users/login');
-  console.log('req.user: ', req.user);
+  console.log('hit GET /api/users/login route');
   req.user.tokenCreate()
     .then(token => {
-      console.log('token from get: ', token);
       res.send(token);
     })
     .catch(next);

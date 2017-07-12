@@ -83,4 +83,32 @@ describe('Testing Profile /api/profiles routes', () => {
       });
     });
   });
+
+  describe('Testing PUT /api/profiles route', () => {
+    describe('If successful', () => {
+      it('It should return an updated profile and 200', () => {
+        let tempUser;
+        return mockProfile.mockOne()
+          .then(user => {
+            tempUser = user;
+            console.log('tempUser: ', tempUser);
+            let updatedProfile = {
+              skillLevel: 'beginner',
+              ridingStyle: 'flow',
+              photoURI: 'http://p.vitalmtb.com/photos/users/2/photos/59694/s1200_minnaar_5846.jpg?1374617933',
+            };
+            return superagent.put(`${APP_URL}/api/profiles/${tempUser._id}`)
+              .set('Authorization', `Bearer ${tempUser.token}`)
+              .send(updatedProfile)
+              .then(res => {
+                console.log('res.body:', res.body);
+                expect(res.status).toEqual(200);
+                expect(res.body.userName).toEqual(tempUser.userName);
+                expect(res.body.skillLevel).toEqual(updatedProfile.skillLevel);
+                expect(res.body.userName).toEqual(updatedProfile.ridingStyle);
+              });
+          });
+      });
+    });
+  });
 });
