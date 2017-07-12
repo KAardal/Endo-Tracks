@@ -13,7 +13,6 @@ const trailRouter = module.exports = new Router();
 trailRouter.post('/api/trails', bearerAuth, s3Upload('image'),
   (req, res, next) => {
     console.log('hit POST /api/trails');
-
     new Trail({
       trailName: req.body.trailName,
       mapURI: req.s3Data.Location,
@@ -31,20 +30,20 @@ trailRouter.post('/api/trails', bearerAuth, s3Upload('image'),
       .catch(next);
   });
 
-trailRouter.get('/api/trails', jsonParser, (req, res, next) => {
+trailRouter.get('/api/trails/', (req, res, next) => {
   console.log('hit GET /api/trails');
-  Trail.findOne(req.params.trailName)
+  Trail.findOne(req.body)
     .then(trail => res.json(trail))
     .catch(next);
 });
 
-trailRouter.put('/api/trails', jsonParser, (req, res, next) => {
+trailRouter.put('/api/trails/:trailName', jsonParser, (req, res, next) => {
   console.log('hit PUT /api/trails');
   let options = {
     new: true,
     runValidators: true,
   };
-  Trail.findOne(req.params.trailName, req.body, options)
+  Trail.findOneAndUpdate({trailname: req.params.trailName}, req.body, options)
     .then(trail => res.json(trail))
     .catch(next);
 });
