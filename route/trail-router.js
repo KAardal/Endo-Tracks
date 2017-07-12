@@ -1,6 +1,7 @@
 'use strict';
 
 const {Router} = require('express');
+const jsonParser = require('body-parser').json;
 const s3Upload = require('../lib/s3-upload-middleware.js');
 const bearerAuth = require('../lib/bearer-auth-middleware.js');
 const Trail = require('../model/trail.js');
@@ -26,6 +27,24 @@ trailRouter.post('/api/trails', bearerAuth, s3Upload('image'),
       comments: [],
     })
       .save()
-      .then(map => res.json(map))
+      .then(trail => res.json(trail))
       .catch(next);
   });
+
+trailRouter.get('/api/trails', jsonParser, (req, res, next) => {
+  console.log('hit GET /api/trails');
+  Trail.findOne(req.params.trailName)
+    .then(trail => res.json(trail))
+    .catch(next);
+});
+
+trailRouter.put('/api/trails', jsonParser, (req, res, next) => {
+  console.log('hit PUT /api/trails');
+  let options = {
+    new: true,
+    runValidators: true,
+  };
+  Trail.findOne(req.params.trailName, req.body, options)
+    .then(trail => res.json(trail))
+    .catch(next);
+});

@@ -1,17 +1,17 @@
 'use strict';
 
 require('dotenv').config({path: `${__dirname}/../.test.env`});
+require('./lib/mock-aws.js');
 
 const expect = require('expect');
 const superagent = require ('superagent');
-require('./lib/mock-aws.js');
+const mockTrail = require('./lib/mock-trail.js');
 const server = require('../lib/server.js');
 const clearDB = require('./lib/clear-db.js');
 const mockUser = require('./lib/mock-user.js');
 // const mockTrail = require('./lib/mock-.trail.js');
 // const mockComment = require('./lib/mock-comment.js');
 const APP_URL = process.env.APP_URL;
-
 let tempUserData;
 
 describe('testing trail router', () => {
@@ -92,6 +92,119 @@ describe('testing trail router', () => {
             });
         });
     });
+  });
 
+  describe('Testing GET /api/trails route', () => {
+    it('should respond with a 200 and a trail name', () => {
+      return mockUser.mockOne()
+        .then(userData => {
+          tempUserData = userData;
+          return superagent.post(`${APP_URL}/api/trails`)
+            .field('trailName', 'trail name')
+            .field('difficulty','difficulty')
+            .field('type', 'type')
+            .field('distance', 'distance')
+            .field('elevation','elevation')
+            .field('lat','number1')
+            .field('long', 'number2')
+            .field('zoom', 'number3')
+            .attach('image', `${__dirname}/assets/map.png`);
+        })
+        .then(() => {
+          console.log('mockTrail', mockTrail);
+          return superagent.get(`${APP_URL}/api/trails`)
+            .send(trailName)
+            .then(res => {
+              console.log('trail we got back', res.text);
+              expect(res.status).toEqual(200);
+              expect(res.text).toExist();
+            });
+        });
+      it('should respond with a 404', () => {
+        return superagent.get(`${APP_URL}/api/untrails`)
+          .send()
+          .catch(err => {
+            expect(err.status).toEqual(404);
+          });
+      });
+      it('should respond with a 400', () => {
+        return mockTrail.mockOne()
+          .then(() => {
+            return superagent.get(`${APP_URL}/api/nontrails`)
+              .send({})
+              .catch(err => {
+                expect(err.status).toEqual(400);
+              });
+          });
+      });
+    });
+
+    describe('testing PUT /api/trails/', () => {
+      it('should respond with a 200 and an updated trail', () => {
+        return mockUser.mockOne()
+          .then(userData => {
+            tempUserData = userData;
+            return superagent.post(`${APP_URL}/api/trails`)
+              .field('trailName', 'trail name')
+              .field('difficulty','difficulty')
+              .field('type', 'type')
+              .field('distance', 'distance')
+              .field('elevation','elevation')
+              .field('lat','number1')
+              .field('long', 'number2')
+              .field('zoom', 'number3')
+              .attach('image', `${__dirname}/assets/map.png`);
+          })
+          .then(() => {
+            return superagent.put(`${APP_URL}/api/trails`)
+              .send({trailName : 'trailName'})
+              .then(res => {
+                console.log('trail we got back', res.text);
+                expect(res.status).toEqual(200);
+                expect(res.text).toExist();
+                return mockTrail.findOne(mockTrail);
+              });
+          });
+        it('should respond with a 400', () => {
+          return mockTrail.createOne()
+          then(() => {
+            console.log('mocktTrail', mockTrail)
+            return superagent.put(`${APP_URL}/api/trails`)
+            .send({})
+            .then( res => {
+              console.log('bad request', res.text);
+              expect(res.status).toEqual(400)
+              expect(res.text).toExist()
+              return mockTrail.findOne({trailName})
+            });
+          })
+        });
+        it('should respond with a 404', () => {
+          return mockTrail.createOne()
+          then(() => {
+            console.log();
+          })
+
+        })
+      });
+    });
+        });
   });
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+0
