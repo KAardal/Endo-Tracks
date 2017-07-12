@@ -23,7 +23,6 @@ describe('testing trail router', () => {
     it('should respond with a trail', () => {
       return mockUser.mockOne()
         .then(userData => {
-          console.log('XXXXXXX token', userData.token);
           tempUserData = userData;
           return superagent.post(`${APP_URL}/api/trails`)
             .set('Authorization', `Bearer ${tempUserData.token}`)
@@ -38,8 +37,6 @@ describe('testing trail router', () => {
             .attach('image', `${__dirname}/assets/map.png`);
         })
         .then(res => {
-          console.log('POST YYYYYYYYYY res.body', res.body);
-          console.log('res.body', res.body);
           expect(res.status).toEqual(200);
           expect(res.body.trailName).toEqual('some shit');
           expect(res.body.difficulty).toEqual('difficulty');
@@ -55,7 +52,7 @@ describe('testing trail router', () => {
     });
 
     it('should respond with a 404', () => {
-      return superagent.post(`${APP_URL}/api/trails`)
+      return superagent.post(`${APP_URL}/api/untrails`)
         .set('Authorization', `Bearer ${tempUserData.user.token}`)
         .send()
         .catch(err => {
@@ -65,7 +62,7 @@ describe('testing trail router', () => {
 
     it('should respond with a 401', () => {
       return superagent.post(`${APP_URL}/api/trails`)
-        .set('authorization', 'Bearer BadToken')
+        .set('authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlblNlZWQiOiJkOGFhM2EwYjdhM2ZjZWUyMzZhNmQ4ZjlkMzBlM2Q0MDc0OWFjM2FiZjQwYzljZGU5OGRjODgzMmE0NjgwMWYxIiwiaWF0IjoxNDk5ODc2MTkwfQ.AUy5X8uzRU5gqWFps8vmab56jIXrSjVnoeNVZmq4PqE')
         .send({
           trailName: 'example trail name',
           difficulty:  'example difficulty',
@@ -88,7 +85,7 @@ describe('testing trail router', () => {
         .then(userData => {
           tempUserData = userData;
           return superagent.post(`${APP_URL}/api/trails`)
-            .set('authorization', `Bearer ${tempUserData.user.token}`)
+            .set('authorization', `Bearer ${tempUserData.token}`)
             .send({})
             .catch(err => {
               expect(err.status).toEqual(400);
