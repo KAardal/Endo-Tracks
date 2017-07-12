@@ -19,21 +19,24 @@ describe('Testing Profile /api/profiles routes', () => {
 
   describe('Testing GET /api/profiles route', () => {
     describe('If the get is successful', () => {
-      it('It should return all profiles', () => {
-        let tempUser;
-        return mockProfile.mockOne()
-          .then(user => {
-            tempUser = user;
-            return superagent.get(`${APP_URL}/api/profiles`)
-              .then(res => {
-                //change this to be an array of multiple profiles.
-                expect(res.body[0]).toIncludeKeys([`__v`, `_id`, `userID`, `userName`]);
-              });
+      it.only('It should return all profiles', () => {
+        return mockProfile.mockMultiple(10)
+          .then(() =>
+            superagent.get(`${APP_URL}/api/profiles`)
+          )
+          .then(res => {
+            console.log('res.body:', res.body);
+            expect(res.status).toEqual(200);
+            res.body.forEach(profile => {
+              expect(profile).toIncludeKeys([`__v`, `_id`, `userID`, `userName`]);
+              expect(profile.userID).toExist();
+              expect(profile.userName).toExist();
+            });
           });
       });
     });
     describe('If the get is successful', () => {
-      it.only('It should return a specific user profile by username', () => {
+      it('It should return a specific user profile by username', () => {
         let userData = {
           userName: `dingo`,
           password: `user password`,

@@ -14,7 +14,12 @@ profileRouter.get('/api/profiles', jsonParser, (req, res, next) => {
       .then(profile => res.send(profile))
       .catch(() => new Error('not found: no profile by that username'));
   }
+  console.log('break 1');
+  console.log('break 2');
   return Profile.find({})
-    .then(profiles => res.send(profiles))
+    .then(profiles => {
+      console.log('profiles: ', profiles);
+      return res.send(profiles);
+    })
     .catch(next);
 });
