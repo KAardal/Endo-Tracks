@@ -39,6 +39,7 @@
     "crypto": "0.0.3",
     "dotenv": "^4.0.0",
     "express": "^4.15.3",
+    "fs-extra": "^3.0.1",
     "jsonwebtoken": "^7.4.1",
     "mongoose": "^4.11.1",
     "universalify": "^0.1.0"
