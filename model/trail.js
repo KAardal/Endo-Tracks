@@ -1,9 +1,6 @@
 'use strict';
 
-const bcrypt = require('bcrypt');
-const crypto = require('crypto');
 const mongoose = require('mongoose');
-const jwt = require('jsonwebtoken');
 
 const trailSchema = mongoose.Schema ({
   trailName: {type: String, required: true, unique: true},
