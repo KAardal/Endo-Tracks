@@ -19,7 +19,6 @@ describe('testing trail router', () => {
     it('should respond with a trail', () => {
       return mockUser.mockOne().then(userData => {
         tempUserData = userData;
-        console.log('token temp: ', tempUserData.token);
         return superagent.post(`${APP_URL}/api/trails`)
           .set('Authorization', `Bearer ${tempUserData.token}`)
           .field('trailName', 'trail name')

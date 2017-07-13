@@ -103,7 +103,6 @@ describe('Testing Profile /api/profiles routes', () => {
               .field('ridingStyle', `flow`)
               .attach('image', `${__dirname}/assets/mtbguy.jpg`)
               .then(res => {
-                console.log('res: ', res.body);
                 expect(res.status).toEqual(200);
                 expect(res.body.userID).toExist();
                 expect(res.body.userName).toEqual(userData.userName);

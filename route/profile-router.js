@@ -31,9 +31,8 @@ profileRouter.get('/api/profiles', jsonParser, (req, res, next) => {
 
 profileRouter.put('/api/profiles', bearerAuth, s3Upload('image'), (req, res, next) => {
   console.log('Hit profile PUT route');
-  console.log('req.s3: ', req.s3Data);
+
   req.body.avatarURI = req.s3Data.Location;
-  console.log('req.body: ', req.body);
 
   let options = {
     new: true,
