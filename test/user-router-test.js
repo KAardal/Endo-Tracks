@@ -82,6 +82,19 @@ describe('Testing /api/users routes', () => {
           });
       });
     });
+    describe('If creating a user with duplicate username', () => {
+      it('it should respond 409 status', () => {
+        return superagent.post(`${APP_URL}/api/users/signup`)
+          .send({userName: 'first user', password: `user password`, email: `user@example.com`})
+          .then(() => {
+            return superagent.post(`${APP_URL}/api/users/signup`)
+              .send({userName: 'first user', password: `user password`, email: `user@example.com`});
+          })
+          .catch(err => {
+            expect(err.status).toEqual(409);
+          });
+      });
+    });
   });
 
   describe('Testing GET /api/users route', () => {

@@ -19,7 +19,10 @@ userRouter.post('/api/users/signup', jsonParser, (req, res, next) => {
   if(req.body.password.length < 1 || typeof req.body.password !== 'string') return next(new Error('bad request: please enter a valid password'));
 
   User.create(req.body)
-    .then(token => res.send(token))
+    .then(token => {
+      if (typeof token === 'object') throw new Error('duplicate key');
+      return res.send(token);
+    })
     .catch(next);
 });
 

@@ -36,7 +36,10 @@ profileRouter.put('/api/profiles', jsonParser, bearerAuth, (req, res, next) => {
     runValidators: true,
   };
 
+
   Profile.findOneAndUpdate({userName: req.body.userName}, req.body, options)
-    .then(updatedProfile => {return res.json(updatedProfile);})
+    .then(updatedProfile => {
+      if (!updatedProfile) return next(new Error('not found: no profile exists'));
+      return res.json(updatedProfile);})
     .catch(next);
 });
