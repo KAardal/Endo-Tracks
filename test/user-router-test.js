@@ -84,15 +84,11 @@ describe('Testing /api/users routes', () => {
     });
     describe('If creating a user with duplicate username', () => {
       it('it should respond 409 status', () => {
-        let userFirst = {
-          userName: `first user`,
-          password: `first password`,
-          email: `user@example.com`,
-        };
-        return mockUser.mockOne(userFirst)
+        return superagent.post(`${APP_URL}/api/users/signup`)
+          .send({userName: 'first user', password: `user password`, email: `user@example.com`})
           .then(() => {
             return superagent.post(`${APP_URL}/api/users/signup`)
-              .send({userName: 'test user', password: `user password`, email: `user@example.com`});
+              .send({userName: 'first user', password: `user password`, email: `user@example.com`});
           })
           .catch(err => {
             expect(err.status).toEqual(409);
