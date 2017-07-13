@@ -96,21 +96,20 @@ describe('Testing Profile /api/profiles routes', () => {
         return User.create(userData)
           .then(user => {
             tempUser = user;
-            let updatedProfile = {
-              userName: userData.userName,
-              skillLevel: 'beginner',
-              ridingStyle: 'flow',
-              photoURI: 'http://p.vitalmtb.com/photos/users/2/photos/59694/s1200_minnaar_5846.jpg?1374617933',
-            };
             return superagent.put(`${APP_URL}/api/profiles/`)
               .set('Authorization', `Bearer ${tempUser}`)
-              .send(updatedProfile)
+              .field('userName', userData.userName)
+              .field('skillLevel', `beginner`)
+              .field('ridingStyle', `flow`)
+              .attach('image', `${__dirname}/assets/mtbguy.jpg`)
               .then(res => {
+                console.log('res: ', res.body);
                 expect(res.status).toEqual(200);
                 expect(res.body.userID).toExist();
                 expect(res.body.userName).toEqual(userData.userName);
-                expect(res.body.skillLevel).toEqual(updatedProfile.skillLevel);
-                expect(res.body.ridingStyle).toEqual(updatedProfile.ridingStyle);
+                expect(res.body.skillLevel).toEqual('beginner');
+                expect(res.body.ridingStyle).toEqual('flow');
+                expect(res.body.avatarURI).toExist();
               });
           });
       });
@@ -126,15 +125,12 @@ describe('Testing Profile /api/profiles routes', () => {
         return User.create(userData)
           .then(user => {
             tempUser = user;
-            let updatedProfile = {
-              userName: userData.userName,
-              skillLevel: 'beginner',
-              ridingStyle: 'flow',
-              photoURI: 'http://p.vitalmtb.com/photos/users/2/photos/59694/s1200_minnaar_5846.jpg?1374617933',
-            };
             return superagent.put(`${APP_URL}/api/profiles/badpathname`)
               .set('Authorization', `Bearer ${tempUser}`)
-              .send(updatedProfile)
+              .field('userName', userData.userName)
+              .field('skillLevel', `beginner`)
+              .field('ridingStyle', `flow`)
+              .attach('image', `${__dirname}/assets/mtbguy.jpg`)
               .catch(err => {
                 expect(err.status).toEqual(404);
               });
@@ -152,15 +148,12 @@ describe('Testing Profile /api/profiles routes', () => {
         return User.create(userData)
           .then(user => {
             tempUser = user;
-            let updatedProfile = {
-              userName: userData.userName,
-              skillLevel: 123,
-              ridingStyle: 'flow',
-              photoURI: 'http://p.vitalmtb.com/photos/users/2/photos/59694/s1200_minnaar_5846.jpg?1374617933',
-            };
             return superagent.put(`${APP_URL}/api/profiles`)
               .set('Authorization', `Bearer ${tempUser}`)
-              .send(updatedProfile)
+              .field('userName', userData.userName)
+              .field('skillLevel', 123)
+              .field('ridingStyle', `flow`)
+              .attach('image', `${__dirname}/assets/mtbguy.jpg`)
               .catch(err => {
                 expect(err.status).toEqual(400);
               });
@@ -178,15 +171,12 @@ describe('Testing Profile /api/profiles routes', () => {
         return User.create(userData)
           .then(user => {
             tempUser = user;
-            let updatedProfile = {
-              userName: 'badusername',
-              skillLevel: 'beginner',
-              ridingStyle: 'flow',
-              photoURI: 'http://p.vitalmtb.com/photos/users/2/photos/59694/s1200_minnaar_5846.jpg?1374617933',
-            };
             return superagent.put(`${APP_URL}/api/profiles`)
               .set('Authorization', `Bearer ${tempUser}`)
-              .send(updatedProfile)
+              .field('userName', 'badusername')
+              .field('skillLevel', 123)
+              .field('ridingStyle', `flow`)
+              .attach('image', `${__dirname}/assets/mtbguy.jpg`)
               .catch(err => {
                 expect(err.status).toEqual(404);
               });
@@ -202,15 +192,12 @@ describe('Testing Profile /api/profiles routes', () => {
         };
         return User.create(userData)
           .then(() => {
-            let updatedProfile = {
-              userName: 'badusername',
-              skillLevel: 'beginner',
-              ridingStyle: 'flow',
-              photoURI: 'http://p.vitalmtb.com/photos/users/2/photos/59694/s1200_minnaar_5846.jpg?1374617933',
-            };
             return superagent.put(`${APP_URL}/api/profiles`)
               .set('Authorization', `Bearer badUser`)
-              .send(updatedProfile)
+              .field('userName', userData.userName)
+              .field('skillLevel', `beginner`)
+              .field('ridingStyle', `flow`)
+              .attach('image', `${__dirname}/assets/mtbguy.jpg`)
               .catch(err => {
                 expect(err.status).toEqual(401);
               });
