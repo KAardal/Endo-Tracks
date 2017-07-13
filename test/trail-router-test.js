@@ -5,7 +5,6 @@ require('./lib/mock-aws.js');
 const expect = require('expect');
 const superagent = require('superagent');
 const server = require('../lib/server.js');
-const mockTrail = require('./lib/mock-trail.js');
 const clearDB = require('./lib/clear-db.js');
 const mockUser = require('./lib/mock-user.js');
 const APP_URL = process.env.APP_URL;
@@ -20,7 +19,6 @@ describe('testing trail router', () => {
     it('should respond with a trail', () => {
       return mockUser.mockOne().then(userData => {
         tempUserData = userData;
-        console.log('YYYYYYYYYYYY', tempUserData);
         return superagent.post(`${APP_URL}/api/trails`)
           .set('Authorization', `Bearer ${tempUserData.token}`)
           .field('trailName', 'trail name')
@@ -85,7 +83,6 @@ describe('testing trail router', () => {
     it('should respond with a 200 and a trail name', () => {
       return mockUser.mockOne().then(userData => {
         tempUserData = userData;
-        console.log(userData, 'userData DAAATAAAAA');
         return superagent.post(`${APP_URL}/api/trails`)
           .set('Authorization', `Bearer ${tempUserData.token}`)
           .field('trailName', 'trail name')
@@ -99,16 +96,12 @@ describe('testing trail router', () => {
           .attach('image', `${__dirname}/assets/map.png`);
       })
         .then((res) => {
-          console.log(res.body, 'res boooodddyyy');
-          console.log('mockTrail', mockTrail);
           return superagent.get(`${APP_URL}/api/trails`)
             .send({trailName: 'trail name'})
             .then(res => {
               expect(res.status).toEqual(200);
-              // expect(res.text).toExist();
             });
-        })
-        .catch(err => (console.log(err.message, 'ERRRORRR MESSAGE')));
+        });
     });
     it('should respond with a 404', () => {
       return superagent.get(`${APP_URL}/api/untrails`).send().catch(err => {
@@ -126,13 +119,11 @@ describe('testing trail router', () => {
           .field('trailName', 'trail name').field('difficulty', 'difficulty').field('type', 'type').field('distance', 'distance').field('elevation', 'elevation').field('lat', 'number1').field('long', 'number2').field('zoom', 'number3').attach('image', `${__dirname}/assets/map.png`);
       })
         .then(() => {
-          console.log('HHHHHHHHHHHHH');
           return superagent.put(`${APP_URL}/api/trails`)
             .set('Authorization', `Bearer ${tempUserData.token}`)
             .field('trailName', 'trail name').field('difficulty', 'easy')
             .attach('image', `${__dirname}/assets/map.png`)
             .then(res => {
-              console.log('trail we got back', res.body);
               expect(res.status).toEqual(200);
               expect(res.body).toExist();
             });
@@ -142,7 +133,6 @@ describe('testing trail router', () => {
     it('should respond with a 400', () => {
       return mockUser.mockOne().then(userData => {
         tempUserData = userData;
-        console.log(userData, 'userData DAAATAAAAA');
         return superagent.post(`${APP_URL}/api/trails`)
           .set('Authorization', `Bearer ${tempUserData.token}`)
           .field('trailName', 'trail name')
@@ -161,19 +151,11 @@ describe('testing trail router', () => {
             .field('trailName', 'badrequest')
             .attach('image', `${__dirname}/assets/map.png`)
             .then(res => {
-              console.log('trail we got back', res.body);
               expect(res.status).toEqual(200);
               expect(res.body).toExist();
             });
         });
     });
 
-    // it('should respond with a 404', () => {
-    //   return mockTrail.mockOne();
-    //   then(() => {
-    //     console.log();
-    //
-    //   });
-    // });
   });
 });
