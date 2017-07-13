@@ -101,12 +101,11 @@ describe('testing trail router', () => {
           return superagent.get(`${APP_URL}/api/trails`)
             .send({trailName: 'trail name'})
             .then(res => {
-              console.log('00000000 trail we got back', res.body);
               expect(res.status).toEqual(200);
               // expect(res.text).toExist();
             });
         })
-        .catch(err => console.log(err.message, 'ERRRORRR MESSAGE'));
+        .catch(err => (console.log(err.message, 'ERRRORRR MESSAGE')));
     });
     it('should respond with a 404', () => {
       return superagent.get(`${APP_URL}/api/untrails`).send().catch(err => {
@@ -126,12 +125,13 @@ describe('testing trail router', () => {
         .then(() => {
           console.log('HHHHHHHHHHHHH');
           return superagent.put(`${APP_URL}/api/trails`)
-            .send({trailName: 'trail name'})
+            .set('Authorization', `Bearer ${tempUserData.token}`)
+            .field('trailName', 'trail name').field('difficulty', 'easy')
+            .attach('image', `${__dirname}/assets/map.png`)
             .then(res => {
-              console.log('trail we got back', res.text);
+              console.log('trail we got back', res.body);
               expect(res.status).toEqual(200);
-              expect(res.text).toExist();
-              return mockTrail.findOne(req.params.trailName);
+              expect(res.body).toExist();
             });
         });
     });
