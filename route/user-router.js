@@ -12,7 +12,7 @@ userRouter.post('/api/users/signup', jsonParser, (req, res, next) => {
   let keys = Object.keys(req.body).length;
   if (keys < 3) return next(new Error('bad request: no req body, please fill out all fields'));
 
-  if(typeof req.body.userName !== 'string') return next(new Error('validation failed, username is not a string'));
+  if(typeof req.body.userName !== 'string') return next(new Error('bad request: validation failed, username is not a string'));
 
   if(!req.body.email.includes('@')) return next(new Error('bad request: please enter valid email'));
 
