@@ -1,7 +1,6 @@
 'use strict';
 
 const {Router} = require('express');
-const jsonParser = require('body-parser').json;
 const s3Upload = require('../lib/s3-upload-middleware.js');
 const bearerAuth = require('../lib/bearer-auth-middleware.js');
 const Trail = require('../model/trail.js');
