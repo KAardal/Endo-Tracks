@@ -18,5 +18,4 @@ mockTrail.mockOne = () => {
     zoom: 3,
     comments: [],
   });
-
 };
