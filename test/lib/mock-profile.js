@@ -34,7 +34,6 @@ mockProfile.mockOne = () => {
 };
 
 mockProfile.mockMultiple = (num) => {
-  console.log('Hit mock multiple profile');
 
   let mockData = {
     userName: faker.internet.userName(),

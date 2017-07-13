@@ -47,9 +47,7 @@ describe('testing trail router', () => {
     });
     it('should respond with a 404', () => {
       return superagent.post(`${APP_URL}/api/untrails`)
-        .catch(err => {
-          expect(err.status).toEqual(404);
-        });
+        .catch(err => expect(err.status).toEqual(404));
     });
     it('should respond with a 401 no token found', () => {
       return superagent.post(`${APP_URL}/api/trails`)
@@ -84,61 +82,69 @@ describe('testing trail router', () => {
           comment: 'example comments',
           mapURI: `${__dirname}/assets/map.png`,
         })
-        .catch(err => {
-          expect(err.status).toEqual(401);
-        });
+        .catch(err => expect(err.status).toEqual(401));
     });
+
     it('should respond with a 400', () => {
-      return mockUser.mockOne().then(userData => {
-        tempUserData = userData;
-        return superagent.post(`${APP_URL}/api/trails`)
-          .set('authorization', `Bearer ${tempUserData.token}`)
-          .send({}).catch(err => {
-            expect(err.status).toEqual(400);
-          });
-      });
+      return mockUser.mockOne()
+        .then(userData => {
+          tempUserData = userData;
+          return superagent.post(`${APP_URL}/api/trails`)
+            .set('authorization', `Bearer ${tempUserData.token}`)
+            .send({}).catch(err => {
+              expect(err.status).toEqual(400);
+            });
+        });
     });
   });
 
   describe('Testing GET /api/trails route', () => {
     it('should respond with a 200 and a trail name', () => {
-      return mockUser.mockOne().then(userData => {
-        tempUserData = userData;
-        return superagent.post(`${APP_URL}/api/trails`)
-          .set('Authorization', `Bearer ${tempUserData.token}`)
-          .field('trailName', 'trail name')
-          .field('difficulty', 'difficulty')
-          .field('type', 'type')
-          .field('distance', 'distance')
-          .field('elevation', 'elevation')
-          .field('lat', 'number1')
-          .field('long', 'number2')
-          .field('zoom', 'number3')
-          .attach('image', `${__dirname}/assets/map.png`);
-      })
+      return mockUser.mockOne()
+        .then(userData => {
+          tempUserData = userData;
+          return superagent.post(`${APP_URL}/api/trails`)
+            .set('Authorization', `Bearer ${tempUserData.token}`)
+            .field('trailName', 'trail name')
+            .field('difficulty', 'difficulty')
+            .field('type', 'type')
+            .field('distance', 'distance')
+            .field('elevation', 'elevation')
+            .field('lat', 'number1')
+            .field('long', 'number2')
+            .field('zoom', 'number3')
+            .attach('image', `${__dirname}/assets/map.png`);
+        })
         .then((res) => {
           return superagent.get(`${APP_URL}/api/trails`)
             .send({trailName: 'trail name'})
-            .then(res => {
-              expect(res.status).toEqual(200);
-            });
+            .then(res => expect(res.status).toEqual(200));
         });
     });
     it('should respond with a 404', () => {
-      return superagent.get(`${APP_URL}/api/untrails`).send().catch(err => {
-        expect(err.status).toEqual(404);
-      });
+      return superagent.get(`${APP_URL}/api/untrails`)
+        .send()
+        .catch(err => expect(err.status).toEqual(404));
     });
   });
 
   describe('testing PUT /api/trails/', () => {
     it('should respond with a 200 and an updated trail', () => {
-      return mockUser.mockOne().then(userData => {
-        tempUserData = userData;
-        return superagent.post(`${APP_URL}/api/trails`)
-          .set('Authorization', `Bearer ${tempUserData.token}`)
-          .field('trailName', 'trail name').field('difficulty', 'difficulty').field('type', 'type').field('distance', 'distance').field('elevation', 'elevation').field('lat', 'number1').field('long', 'number2').field('zoom', 'number3').attach('image', `${__dirname}/assets/map.png`);
-      })
+      return mockUser.mockOne()
+        .then(userData => {
+          tempUserData = userData;
+          return superagent.post(`${APP_URL}/api/trails`)
+            .set('Authorization', `Bearer ${tempUserData.token}`)
+            .field('trailName', 'trail name')
+            .field('difficulty', 'difficulty')
+            .field('type', 'type')
+            .field('distance', 'distance')
+            .field('elevation', 'elevation')
+            .field('lat', 'number1')
+            .field('long', 'number2')
+            .field('zoom', 'number3')
+            .attach('image', `${__dirname}/assets/map.png`);
+        })
         .then(() => {
           return superagent.put(`${APP_URL}/api/trails`)
             .set('Authorization', `Bearer ${tempUserData.token}`)
@@ -152,20 +158,21 @@ describe('testing trail router', () => {
     });
 
     it('should respond with a 400', () => {
-      return mockUser.mockOne().then(userData => {
-        tempUserData = userData;
-        return superagent.post(`${APP_URL}/api/trails`)
-          .set('Authorization', `Bearer ${tempUserData.token}`)
-          .field('trailName', 'trail name')
-          .field('difficulty', 'difficulty')
-          .field('type', 'type')
-          .field('distance', 'distance')
-          .field('elevation', 'elevation')
-          .field('lat', 'number1')
-          .field('long', 'number2')
-          .field('zoom', 'number3')
-          .attach('image', `${__dirname}/assets/map.png`);
-      })
+      return mockUser.mockOne()
+        .then(userData => {
+          tempUserData = userData;
+          return superagent.post(`${APP_URL}/api/trails`)
+            .set('Authorization', `Bearer ${tempUserData.token}`)
+            .field('trailName', 'trail name')
+            .field('difficulty', 'difficulty')
+            .field('type', 'type')
+            .field('distance', 'distance')
+            .field('elevation', 'elevation')
+            .field('lat', 'number1')
+            .field('long', 'number2')
+            .field('zoom', 'number3')
+            .attach('image', `${__dirname}/assets/map.png`);
+        })
         .then(() => {
           return superagent.put(`${APP_URL}/api/trails`)
             .set('Authorization', `Bearer ${tempUserData.token}`)
@@ -177,6 +184,5 @@ describe('testing trail router', () => {
             });
         });
     });
-
   });
 });
