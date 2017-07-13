@@ -20,7 +20,7 @@ describe('Testing Profile /api/profiles routes', () => {
 
   describe('Testing GET /api/profiles route', () => {
     describe('If the successful', () => {
-      it('It should return a sepific user profile', () => {
+      it('It should return a specific user profile', () => {
         let tempUser;
         return mockProfile.mockOne()
           .then(user => {

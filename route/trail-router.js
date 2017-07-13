@@ -9,22 +9,41 @@ const Trail = require('../model/trail.js');
 
 const trailRouter = module.exports = new Router();
 
-trailRouter.post('/api/trails', bearerAuth, s3Upload('image'), (req, res, next) => {
-  console.log('hit POST /api/trails');
+trailRouter.post('/api/trails', bearerAuth, s3Upload('image'),
+  (req, res, next) => {
+    console.log('hit POST /api/trails');
+    new Trail({
+      trailName: req.body.trailName,
+      mapURI: req.s3Data.Location,
+      difficulty: req.body.difficulty,
+      type: req.body.type,
+      distance: req.body.distance,
+      elevation: req.body.elevation,
+      lat: req.body.lat,
+      long: req.body.long,
+      zoom: req.body.zoom,
+      comments: [],
+    })
+      .save()
+      .then(trail => res.json(trail))
+      .catch(next);
+  });
 
-  new Trail({
-    trailName: req.body.trailName,
-    mapURI: req.s3Data.Location,
-    difficulty: req.body.difficulty,
-    type: req.body.type,
-    distance: req.body.distance,
-    elevation: req.body.elevation,
-    lat: req.body.lat,
-    long: req.body.long,
-    zoom: req.body.zoom,
-    comments: [],
-  })
-    .save()
-    .then(map => res.json(map))
+trailRouter.get('/api/trails', (req, res, next) => {
+  console.log('hit GET /api/trails');
+  Trail.findOne(req.body)
+    .then(trail => res.json(trail))
+    .catch(next);
+});
+
+trailRouter.put('/api/trails',  bearerAuth, s3Upload('image'), (req, res, next) => {
+  console.log('hit PUT /api/trails');
+  console.log(req.body, 'req.boooodddyyy');
+  let options = {
+    new: true,
+    runValidators: true,
+  };
+  Trail.findOneAndUpdate({trailname: req.body.name}, req.body, options)
+    .then(trail => res.json(trail))
     .catch(next);
 });
