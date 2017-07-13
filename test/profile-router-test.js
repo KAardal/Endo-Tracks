@@ -115,5 +115,107 @@ describe('Testing Profile /api/profiles routes', () => {
           });
       });
     });
+    describe('If requesting to a pad pathaname', () => {
+      it('It should return a 404', () => {
+        let userData = {
+          userName: `new user`,
+          password: `user password`,
+          email: `user@example.com`,
+        };
+        let tempUser;
+        return User.create(userData)
+          .then(user => {
+            tempUser = user;
+            let updatedProfile = {
+              userName: userData.userName,
+              skillLevel: 'beginner',
+              ridingStyle: 'flow',
+              photoURI: 'http://p.vitalmtb.com/photos/users/2/photos/59694/s1200_minnaar_5846.jpg?1374617933',
+            };
+            return superagent.put(`${APP_URL}/api/profiles/badpathname`)
+              .set('Authorization', `Bearer ${tempUser}`)
+              .send(updatedProfile)
+              .catch(err => {
+                expect(err.status).toEqual(404);
+              });
+          });
+      });
+    });
+    describe('If passing in bad content', () => {
+      it('It should return a 400', () => {
+        let userData = {
+          userName: `new user`,
+          password: `user password`,
+          email: `user@example.com`,
+        };
+        let tempUser;
+        return User.create(userData)
+          .then(user => {
+            tempUser = user;
+            let updatedProfile = {
+              userName: userData.userName,
+              skillLevel: 123,
+              ridingStyle: 'flow',
+              photoURI: 'http://p.vitalmtb.com/photos/users/2/photos/59694/s1200_minnaar_5846.jpg?1374617933',
+            };
+            return superagent.put(`${APP_URL}/api/profiles`)
+              .set('Authorization', `Bearer ${tempUser}`)
+              .send(updatedProfile)
+              .catch(err => {
+                expect(err.status).toEqual(400);
+              });
+          });
+      });
+    });
+    describe('If the profile cant be found', () => {
+      it('It should return a 404', () => {
+        let userData = {
+          userName: `new user`,
+          password: `user password`,
+          email: `user@example.com`,
+        };
+        let tempUser;
+        return User.create(userData)
+          .then(user => {
+            tempUser = user;
+            let updatedProfile = {
+              userName: 'badusername',
+              skillLevel: 'beginner',
+              ridingStyle: 'flow',
+              photoURI: 'http://p.vitalmtb.com/photos/users/2/photos/59694/s1200_minnaar_5846.jpg?1374617933',
+            };
+            return superagent.put(`${APP_URL}/api/profiles`)
+              .set('Authorization', `Bearer ${tempUser}`)
+              .send(updatedProfile)
+              .catch(err => {
+                expect(err.status).toEqual(404);
+              });
+          });
+      });
+    });
+    describe('If the user passes in a bad token for bearerAuth', () => {
+      it('It should return a 401', () => {
+        let userData = {
+          userName: `new user`,
+          password: `user password`,
+          email: `user@example.com`,
+        };
+        return User.create(userData)
+          .then(() => {
+            let updatedProfile = {
+              userName: 'badusername',
+              skillLevel: 'beginner',
+              ridingStyle: 'flow',
+              photoURI: 'http://p.vitalmtb.com/photos/users/2/photos/59694/s1200_minnaar_5846.jpg?1374617933',
+            };
+            return superagent.put(`${APP_URL}/api/profiles`)
+              .set('Authorization', `Bearer badUser`)
+              .send(updatedProfile)
+              .catch(err => {
+                expect(err.status).toEqual(401);
+              });
+          });
+      });
+    });
   });
 });
