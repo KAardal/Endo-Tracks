@@ -10,13 +10,13 @@ userRouter.post('/api/users/signup', jsonParser, (req, res, next) => {
   console.log('hit POST /api/users/signup route');
 
   let keys = Object.keys(req.body).length;
-  if (keys < 3) return next(new Error('no req body, please fill out all fields'));
+  if (keys < 3) return next(new Error('bad request: no req body, please fill out all fields'));
 
-  if(typeof req.body.userName !== 'string') return next(new Error('validation failed, username is not a string'));
+  if(typeof req.body.userName !== 'string') return next(new Error('bad request: validation failed, username is not a string'));
 
-  if(!req.body.email.includes('@')) return next(new Error('validation failed, please enter valid email'));
+  if(!req.body.email.includes('@')) return next(new Error('bad request: please enter valid email'));
 
-  if(req.body.password.length < 1 || typeof req.body.password !== 'string') return next(new Error('validation failed, please enter a valid password'));
+  if(req.body.password.length < 1 || typeof req.body.password !== 'string') return next(new Error('bad request: please enter a valid password'));
 
   User.create(req.body)
     .then(token => res.send(token))
