@@ -7,7 +7,7 @@ const superagent = require('superagent');
 const expect = require('expect');
 
 const clearDB = require('./lib/clear-db.js');
-// const mockUser = require('./lib/mock-user.js');
+const User = require('../model/user.js');
 const mockProfile = require('./lib/mock-profile.js');
 const server = require('../lib/server.js');
 
@@ -19,17 +19,98 @@ describe('Testing Profile /api/profiles routes', () => {
   afterEach(clearDB);
 
   describe('Testing GET /api/profiles route', () => {
-    describe('If the successful', () => {
-      it('It should return a specific user profile', () => {
-        let tempUser;
+    describe('If the get multiple is successful', () => {
+      it('It should return all profiles', () => {
+        return mockProfile.mockMultiple(10)
+          .then(() =>
+            superagent.get(`${APP_URL}/api/profiles`)
+          )
+          .then(res => {
+            expect(res.status).toEqual(200);
+            res.body.forEach(profile => {
+              expect(profile).toIncludeKeys([`__v`, `_id`, `userID`, `userName`]);
+              expect(profile.userID).toExist();
+              expect(profile.userName).toExist();
+            });
+          });
+      });
+    });
+    describe('If the get is successful', () => {
+      it('It should return a specific user profile by username', () => {
+        let userData = {
+          userName: `new user`,
+          password: `user password`,
+          email: `user@example.com`,
+        };
+        return User.create(userData)
+          .then(() => {
+            return superagent.get(`${APP_URL}/api/profiles`)
+              .send({userName: userData.userName})
+              .then(res => {
+                expect(res.body[0].userName).toEqual(userData['userName']);
+                expect(res.body[0]._id).toExist();
+                expect(res.body[0].userID).toExist();
+              });
+          });
+      });
+    });
+    describe('If passing in a bad username', () => {
+      it('It should return a 404', () => {
+        let userData = {
+          userName: `new user`,
+          password: `user password`,
+          email: `user@example.com`,
+        };
+        return User.create(userData)
+          .then(() => {
+            return superagent.get(`${APP_URL}/api/profiles`)
+              .send({userName: `badusername`})
+              .catch(err => {
+                expect(err.status).toEqual(404);
+              });
+          });
+      });
+    });
+    describe('If passing in bad pathname', () => {
+      it('It should return a 404', () => {
         return mockProfile.mockOne()
+          .then(() => {
+            return superagent.get(`${APP_URL}/api/badpathname`)
+              .catch(err => {
+                expect(err.status).toEqual(404);
+              });
+          });
+      });
+    });
+  });
+
+  describe('\nTesting PUT /api/profiles route', () => {
+    describe('If successful', () => {
+      it('It should return an updated profile and 200', () => {
+        let userData = {
+          userName: `new user`,
+          password: `user password`,
+          email: `user@example.com`,
+        };
+        let tempUser;
+        return User.create(userData)
           .then(user => {
             tempUser = user;
-            return superagent.get(`${APP_URL}/api/profiles`)
+            let updatedProfile = {
+              userName: userData.userName,
+              skillLevel: 'beginner',
+              ridingStyle: 'flow',
+              photoURI: 'http://p.vitalmtb.com/photos/users/2/photos/59694/s1200_minnaar_5846.jpg?1374617933',
+            };
+            return superagent.put(`${APP_URL}/api/profiles/`)
+              .set('Authorization', `Bearer ${tempUser}`)
+              .send(updatedProfile)
               .then(res => {
-                console.log('res: ', res.body);
-                expect(res.body.userID).toEqual(tempUser._id);
-                expect(res.body.userName).toEqual(tempUser.user.userName);
+                expect(res.status).toEqual(200);
+                expect(res.body.userID).toExist();
+                expect(res.body.userName).toEqual(userData.userName);
+                expect(res.body.skillLevel).toEqual(updatedProfile.skillLevel);
+                expect(res.body.ridingStyle).toEqual(updatedProfile.ridingStyle);
               });
           });
       });

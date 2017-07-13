@@ -20,7 +20,7 @@ userSchema.methods.passwordHashCreate = function(password){
       this.passwordHash = hash;
       return this;
     })
-    .catch(err => console.log('err', err.message));
+    .catch(err => {return new Error('unauthorized: hash wasn\'t created');});
 };
 
 userSchema.methods.passwordHashCompare = function(password){
@@ -67,8 +67,6 @@ User.create = (data) => {
   return new User(data)
     .passwordHashCreate(password)
     .then(newUser => {
-      console.log('newUser id: ', newUser._id);
-      console.log('newUser name: ', newUser.userName);
       let profileData = {
         userID: newUser._id,
         userName: newUser.userName,
@@ -77,5 +75,7 @@ User.create = (data) => {
         .save();
       return newUser;
     })
-    .then(newUser => newUser.tokenCreate());
+    .then(newUser => {
+      return newUser.tokenCreate();
+    });
 };

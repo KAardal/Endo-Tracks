@@ -4,8 +4,6 @@ const {Router} = require('express');
 const s3Upload = require('../lib/s3-upload-middleware.js');
 const bearerAuth = require('../lib/bearer-auth-middleware.js');
 const Trail = require('../model/trail.js');
-// const User = require('../model/user.js');
-// const jsonParser = require('body-parser');
 
 const trailRouter = module.exports = new Router();
 
@@ -38,7 +36,6 @@ trailRouter.get('/api/trails', (req, res, next) => {
 
 trailRouter.put('/api/trails',  bearerAuth, s3Upload('image'), (req, res, next) => {
   console.log('hit PUT /api/trails');
-  console.log(req.body, 'req.boooodddyyy');
   let options = {
     new: true,
     runValidators: true,
