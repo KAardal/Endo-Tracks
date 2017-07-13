@@ -53,20 +53,23 @@ describe('testing trail router', () => {
         });
     });
     it('should respond with a 401', () => {
-      return superagent.post(`${APP_URL}/api/trails`).set('authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlblNlZWQiOiJkOGFhM2EwYjdhM2ZjZWUyMzZhNmQ4ZjlkMzBlM2Q0MDc0OWFjM2FiZjQwYzljZGU5OGRjODgzMmE0NjgwMWYxIiwiaWF0IjoxNDk5ODc2MTkwfQ.AUy5X8uzRU5gqWFps8vmab56jIXrSjVnoeNVZmq4PqE').send({
-        trailName: 'example trail name',
-        difficulty: 'example difficulty',
-        type: 'example type',
-        distance: 'example distance',
-        elevation: 'example elevation',
-        lat: 'number between -90 and 90',
-        long: 'number between -180 and 180',
-        zoom: 'number between 0 - 21',
-        comment: 'example comments',
-        mapURI: `${__dirname}/assets/map.png`,
-      }).catch(err => {
-        expect(err.status).toEqual(401);
-      });
+      return superagent.post(`${APP_URL}/api/trails`)
+        .set('authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlblNlZWQiOiJkOGFhM2EwYjdhM2ZjZWUyMzZhNmQ4ZjlkMzBlM2Q0MDc0OWFjM2FiZjQwYzljZGU5OGRjODgzMmE0NjgwMWYxIiwiaWF0IjoxNDk5ODc2MTkwfQ.AUy5X8uzRU5gqWFps8vmab56jIXrSjVnoeNVZmq4PqE')
+        .send({
+          trailName: 'example trail name',
+          difficulty: 'example difficulty',
+          type: 'example type',
+          distance: 'example distance',
+          elevation: 'example elevation',
+          lat: 'number between -90 and 90',
+          long: 'number between -180 and 180',
+          zoom: 'number between 0 - 21',
+          comment: 'example comments',
+          mapURI: `${__dirname}/assets/map.png`,
+        })
+        .catch(err => {
+          expect(err.status).toEqual(401);
+        });
     });
     it('should respond with a 400', () => {
       return mockUser.mockOne().then(userData => {
