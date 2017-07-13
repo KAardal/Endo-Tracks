@@ -16,26 +16,27 @@ profileRouter.get('/api/profiles', jsonParser, (req, res, next) => {
         if (profile.length < 1) return next(new Error('not found: no profile by that username'));
 
         return res.send(profile);
-      });
+      })
+      .catch(next);
   }
   return Profile.find({})
     .then(profiles => {
       if (profiles.length < 1) return next(new Error('not found: no profiles exist'));
 
       return res.send(profiles);
-    });
+    })
+    .catch(next);
 });
 
-profileRouter.put('/api/profiles/:id', jsonParser, bearerAuth, (req, res, next) => {
+profileRouter.put('/api/profiles', jsonParser, bearerAuth, (req, res, next) => {
   console.log('Hit profile PUT route');
-  console.log('req.body: ', req.body);
-  //json parse it?
+
   let options = {
     new: true,
     runValidators: true,
   };
 
-  Profile.findByIdAndUpdate(req.params.id, req.body, options)
+  Profile.findOneAndUpdate({userName: req.body.userName}, req.body, options)
     .then(updatedProfile => {return res.json(updatedProfile);})
     .catch(next);
 });

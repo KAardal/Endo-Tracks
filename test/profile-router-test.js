@@ -26,7 +26,6 @@ describe('Testing Profile /api/profiles routes', () => {
             superagent.get(`${APP_URL}/api/profiles`)
           )
           .then(res => {
-            console.log('res.body:', res.body);
             expect(res.status).toEqual(200);
             res.body.forEach(profile => {
               expect(profile).toIncludeKeys([`__v`, `_id`, `userID`, `userName`]);
@@ -39,14 +38,14 @@ describe('Testing Profile /api/profiles routes', () => {
     describe('If the get is successful', () => {
       it('It should return a specific user profile by username', () => {
         let userData = {
-          userName: `dingo`,
+          userName: `new user`,
           password: `user password`,
           email: `user@example.com`,
         };
         return User.create(userData)
           .then(() => {
             return superagent.get(`${APP_URL}/api/profiles`)
-              .send({userName: `dingo`})
+              .send({userName: userData.userName})
               .then(res => {
                 expect(res.body[0].userName).toEqual(userData['userName']);
                 expect(res.body[0]._id).toExist();
@@ -58,7 +57,7 @@ describe('Testing Profile /api/profiles routes', () => {
     describe('If passing in a bad username', () => {
       it('It should return a 404', () => {
         let userData = {
-          userName: `dingo`,
+          userName: `new user`,
           password: `user password`,
           email: `user@example.com`,
         };
@@ -85,28 +84,33 @@ describe('Testing Profile /api/profiles routes', () => {
     });
   });
 
-  describe('Testing PUT /api/profiles route', () => {
+  describe('\nTesting PUT /api/profiles route', () => {
     describe('If successful', () => {
       it('It should return an updated profile and 200', () => {
+        let userData = {
+          userName: `new user`,
+          password: `user password`,
+          email: `user@example.com`,
+        };
         let tempUser;
-        return mockProfile.mockOne()
+        return User.create(userData)
           .then(user => {
             tempUser = user;
-            console.log('tempUser: ', tempUser);
             let updatedProfile = {
+              userName: userData.userName,
               skillLevel: 'beginner',
               ridingStyle: 'flow',
               photoURI: 'http://p.vitalmtb.com/photos/users/2/photos/59694/s1200_minnaar_5846.jpg?1374617933',
             };
-            return superagent.put(`${APP_URL}/api/profiles/${tempUser._id}`)
-              .set('Authorization', `Bearer ${tempUser.token}`)
+            return superagent.put(`${APP_URL}/api/profiles/`)
+              .set('Authorization', `Bearer ${tempUser}`)
               .send(updatedProfile)
               .then(res => {
-                console.log('res.body:', res.body);
                 expect(res.status).toEqual(200);
-                expect(res.body.userName).toEqual(tempUser.userName);
+                expect(res.body.userID).toExist();
+                expect(res.body.userName).toEqual(userData.userName);
                 expect(res.body.skillLevel).toEqual(updatedProfile.skillLevel);
-                expect(res.body.userName).toEqual(updatedProfile.ridingStyle);
+                expect(res.body.ridingStyle).toEqual(updatedProfile.ridingStyle);
               });
           });
       });
