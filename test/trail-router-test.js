@@ -115,7 +115,7 @@ describe('testing trail router', () => {
   });
 
   describe('testing PUT /api/trails/', () => {
-    it.only('should respond with a 200 and an updated trail', () => {
+    it('should respond with a 200 and an updated trail', () => {
       return mockUser.mockOne().then(userData => {
         tempUserData = userData;
         return superagent.post(`${APP_URL}/api/trails`)
@@ -137,20 +137,36 @@ describe('testing trail router', () => {
     });
 
     it('should respond with a 400', () => {
-      return mockTrail.createOne()
+      return mockUser.mockOne().then(userData => {
+        tempUserData = userData;
+        console.log(userData, 'userData DAAATAAAAA');
+        return superagent.post(`${APP_URL}/api/trails`)
+          .set('Authorization', `Bearer ${tempUserData.token}`)
+          .field('trailName', 'trail name')
+          .field('difficulty', 'difficulty')
+          .field('type', 'type')
+          .field('distance', 'distance')
+          .field('elevation', 'elevation')
+          .field('lat', 'number1')
+          .field('long', 'number2')
+          .field('zoom', 'number3')
+          .attach('image', `${__dirname}/assets/map.png`);
+      })
         .then(() => {
-          console.log('mocktTrail', mockTrail);
-          return superagent.put(`${APP_URL}/api/trails`).send({}).then(res => {
-            console.log('bad request', res.text);
-            expect(res.status).toEqual(400);
-            expect(res.text).toExist();
-            return mockTrail.findOne(req.params.trailName);
-          });
+          return superagent.put(`${APP_URL}/api/trails`)
+            .set('Authorization', `Bearer ${tempUserData.token}`)
+            .field('trailName', 'badrequest')
+            .attach('image', `${__dirname}/assets/map.png`)
+            .then(res => {
+              console.log('trail we got back', res.body);
+              expect(res.status).toEqual(200);
+              expect(res.body).toExist();
+            });
         });
     });
 
     // it('should respond with a 404', () => {
-    //   return mockTrail.createOne();
+    //   return mockTrail.mockOne();
     //   then(() => {
     //     console.log();
     //
