@@ -51,18 +51,19 @@ trailRouter.put('/api/trails',  bearerAuth, s3Upload('image'), (req, res, next) 
 
 trailRouter.delete('/api/trails/:id', (req, res, next) => {
   console.log('hit DELETE /api/trails');
-  let key;
+  let key = [];
 
   Trail.findOne({trailName: req.params.id})
     .then(trail => {
       key = trail.mapURI.split('/');
     })
-    .catch(err => next(err));
-
-  Trail.deleteOne({trailName: req.params.id})
-    .then(trail => {
-      s3Delete(key[key.length-1]);
-      res.json();
-    })
+    .then(
+      Trail.deleteOne({trailName: req.params.id})
+        .then(() => {
+          s3Delete(key[key.length-1]);
+          res.json();
+        })
+        .catch(err => next(err))
+    )
     .catch(err => next(err));
 });
