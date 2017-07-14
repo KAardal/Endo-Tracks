@@ -204,7 +204,7 @@ describe('testing trail router', () => {
             .attach('image', `${__dirname}/assets/map.png`);
         })
         .then(trail => {
-          return superagent.delete(`${APP_URL}/api/trails/trail name`)
+          return superagent.delete(`${APP_URL}/api/trails/${trail.body.trailName}`)
             .set('Authorization', `Bearer ${tempUserData.token}`)
             .then(res => {
               expect(res.status).toEqual(200);
