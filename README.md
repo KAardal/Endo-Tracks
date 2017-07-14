@@ -6,7 +6,7 @@
 * **Kyle Aardal**
 * **Scott Mccoy**
 ------------
-### Overview
+## Overview
 The Pacific Northwest is rich with excellent bike trails for all types of riders, but the riding community is currently lacking a reliable resource to learn about trails prior to riding them.
 
 Endo Tracks fills that gap by allowing riders to share their experiences with the community.  This application allows riders to maximize their time, and removes the guesswork when checking out new trails.
@@ -32,6 +32,8 @@ Users will also be able to upload a photo, write a comment, and rate the trail.
 
 --------
 ### Architecture
+![image of architecture]
+(https://drive.google.com/open?id=0ByEi7DgDI5yXOFFFdVJENGRONnM)
 ---
 ### Technologies:
 * node.js server
@@ -54,7 +56,6 @@ Images for profile avatars and trail maps are stored to AWS S3 and served to the
 All models are saved under the MongoDB database.
 The Mongo DB is hosted by Heroku and the application is deployed by Heroku.
 
-
 --------
 ### Middleware:
 The express router middleware provides the base routing capability.
@@ -74,17 +75,75 @@ When data is passed through, each model (based on mongoose schema) has its own u
 Exception: A profile is created upon initial user sign-up.  This profile can be update by the user in the future.
 
 --------
-### How To Login: SCOTT
-Required:
-* Username, email
-* How do users log in?
-* Difference between a User and a Profile
-*
+### How to start the server:
+Start the server - npm start
+Start the database - npm start-db
+Stop the database - npm stop-db
+Run tests - npm test
+
+--------
+### How a new user would sign up:
+##### Request: POST
+Route to pass data to: https://endo-tracks.herokuapp.com/api/users/signup
+###### Required Data:
+userName: ‘<new user>’ - a unique string
+Password: ‘<new password>’ - a string
+Email: ‘<new email>’ - a unique string requiring ‘@’ symbol
+###### Back end operations:
+Password is deleted from the request, passed in to create a password hash using bcrypt.
+A token seed is created using crypto.
+A token is returned to the user if all previous conditions are met.
+
+### When a user logs in.
+##### Request: GET
+Route to pass data to: https://endo-tracks.herokuapp.com/api/users/login
+###### Required Data:
+userName: ‘users name’
+Password: ‘users password’
+###### Back end operations:
+User name and password are sent through the basic authorization middleware and returned a token if passing.
+When a user wants to CREATE/UPDATE/DELETE a trail or UPDATE their profile.
+User logs in and receives authorization token. (see above)
+Update their profile.
+
+##### Request: PUT
+Route to pass data to: https://endo-tracks.herokuapp.com/api/profiles/
+###### Required Data:
+userName: ‘users name’ - to find the profile
+Optional data to update:
+skillLevel: ‘their level’ - string
+ridingStyle: ‘their style’ - string
+avatarURI: ‘image file from users local’ - converts to string
+
+###### Back end operations:
+User is returned the updated profile.
+Retrieve profiles.
+NOTE: this route is public and does not require user auth.
+##### Request: GET
+Route to pass data to: https://endo-tracks.herokuapp.com/api/profiles/
+
+If no data is passed in: Returns all profiles from the database
+If data is passed in:
+* ###### Required Data:
+* userName: ‘users name’ - to find the profile
+###### Back end operations:
+* Returns single profile by userName.
+
 --------
 ## ROUTES
 ### USERS
+User Schema:
+```javascript
+const userSchema = mongoose.Schema({
+  passwordHash: {type: String, required: true},
+  userName: {type: String, required: true, unique: true, minlength: 2},
+  email: {type: String, required: true, unique: true},
+  tokenSeed: {type: String, required: true, unique: true},
+});
+```
+
 ##### POST /api/users/signup
-Required Data:
+###### Required Data:
 * User ID
 * User Name
 * Skill Level
@@ -101,43 +160,64 @@ Required Data:
 #### DELETE /api/users/delete
 
 ### PROFILES
-#### POST /api/users/signup
-Required Data:
-* Username
-* Password
-* Email
-*
-This route will create a new user account. Users will then be able to complete their profiles, and access the application’s features.
+Profile Schema:
+```javascript
+const profileSchema = mongoose.Schema({
+	userID: {type: mongoose.Schema.Types.ObjectId, required: true},
+	userName: {type: String, required: true, unique: true},
+	skillLevel: {type: String},
+	ridingStyle: {type: String},
+	photoURI: {type: String},
+});
+```
 
-#### GET /api/profiles
-This route allows users to view their own profile and profiles of other riders in the community.
-#### PUT /api/profiles
-This route allows users to update their existing profile, including adding their skill level and riding style, or uploading a profile picture.
 
+
+------
 ### TRAILS
-#### POST /api/trails
-Required Data:
-* Trail name
-* Difficulty
-* Type
-* Distance
-* Elevation
-* Lat (latitude)
-* Long (longitude)
-* Zoom (radius)
-* Map (image)
+```javascript
+const trailSchema = mongoose.Schema ({
+  trailName: {type: String, required: true, unique: true},
+  mapURI: {type: String, required: true, unique: true},
+  difficulty: {type: String, required: true, unique: true},
+  type: {type: String, required: true, unique: true},
+  distance: {type: String, required: true, unique: true},
+  elevation: {type: String, required: true, unique: true},
+  lat: {type: String, required: true, unique: true},
+  long: {type: String, required: true, unique: true},
+  zoom: {type: String, required: true, unique: true},
+  comments: [{type: mongoose.Schema.Types.ObjectId, ref: 'comment'}],
+});
+```
+### Retrieve Trails.
+NOTE: this route is public and does not require user auth.
+###### Request: GET
+Route to pass data to: https://endo-tracks.herokuapp.com/api/trails
+###### Required Data:
+trailName: ‘trail name’ - to find the trail
+###### Back end operations:
+Returns single trail by trailName.
 
-This route creates a new trail with the relevant information that users are seeking when using the application. It provides the location of the trail, along with the type and difficulty. Users posting #new trails will also upload images so riders can see what a trail actually looks like.
+### Create/Update a trail.
+Note: Authorization is required.
+###### Request: POST / PUT
+Route to pass data to: https://endo-tracks.herokuapp.com/api/trails/
+###### Required Data:
+trailName: ‘trail name’
+###### Optional data to update (required for POST):
+mapUIR: ‘image file from users local’ - converts to string
+Difficulty: ‘difficulty’ - string
+Type: ‘type of riding’ - a unique string
+distance: ‘distance’ - string
+Elevation: ‘ elevation’ - string
+lat: ‘lat’ - string
+Long: ‘long’ - string
+Zoom: ‘zoom’ - string
 
-#### GET /api/trails
-This route allows users to access the database of trails that their peers in the community have created.
-Required Data:
-* Trail name
+###### Back end operations:
+Trail is returned.
 
-#### PUT /api/trails
-This route allows users to update existing trails existing in the application. Importantly, images and difficulty can be updated based on the current conditions of the trail.
+Put in the middle ware for error handler-
+Errors are being handled for pathname.
 
-Required Data:
-* Trail name
-*
 #### DELETE /api/trails/delete
