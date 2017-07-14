@@ -32,11 +32,9 @@ Users will also be able to upload a photo, write a comment, and rate the trail.
 
 --------
 ### Architecture
-![diagram of Endo Tracks API architecture]
-(./test/assets/EndoTracks-architecture.png)
+![diagram of Endo Tracks API architecture](./test/assets/EndoTracks-architecture.png)
 
-[![diagram of Endo Tracks API architecture]
-(https://github.com/KAardal/endo-tracks/blob/master/test/assets/EndoTracks-architecture.png)]
+[![diagram of Endo Tracks API architecture](https://github.com/KAardal/endo-tracks/blob/master/test/assets/EndoTracks-architecture.png)]
 
 ---
 ### Technologies:
