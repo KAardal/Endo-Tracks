@@ -20,5 +20,5 @@ AWS.mock('S3', 'deleteObject', function(params, callback) {
   if(!params.Key) return callback(new Error('must have a key'));
   if(params.Bucket !== 'fake-bucket') return callback(new Error('bucket must be fake-bucket'));
 
-  callback();
+  callback(null, {});
 });

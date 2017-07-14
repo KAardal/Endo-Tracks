@@ -2,6 +2,7 @@
 
 const {Router} = require('express');
 const s3Upload = require('../lib/s3-upload-middleware.js');
+const s3Delete = require('../lib/s3-delete-middleware.js');
 const bearerAuth = require('../lib/bearer-auth-middleware.js');
 const Trail = require('../model/trail.js');
 
@@ -43,4 +44,22 @@ trailRouter.put('/api/trails',  bearerAuth, s3Upload('image'), (req, res, next) 
   Trail.findOneAndUpdate({trailname: req.body.name}, req.body, options)
     .then(trail => res.json(trail))
     .catch(next);
+});
+
+trailRouter.delete('/api/trails/:id', (req, res, next) => {
+  console.log('hit DELETE /api/trails');
+  let key;
+
+  Trail.findOne({trailName: req.params.id})
+    .then(trail => {
+      key = trail.mapURI.split('/');
+    })
+    .catch(err => next(err));
+
+  Trail.deleteOne({trailName: req.params.id})
+    .then(trail => {
+      s3Delete(key[key.length-1]);
+      res.json();
+    })
+    .catch(err => next(err));
 });

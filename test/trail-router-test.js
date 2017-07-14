@@ -19,7 +19,6 @@ describe('testing trail router', () => {
     it('should respond with a trail', () => {
       return mockUser.mockOne().then(userData => {
         tempUserData = userData;
-        console.log('token temp: ', tempUserData.token);
         return superagent.post(`${APP_URL}/api/trails`)
           .set('Authorization', `Bearer ${tempUserData.token}`)
           .field('trailName', 'trail name')
@@ -181,6 +180,33 @@ describe('testing trail router', () => {
             .then(res => {
               expect(res.status).toEqual(200);
               expect(res.body).toExist();
+            });
+        });
+    });
+  });
+
+  describe('Testing DELETE /api/trails', () => {
+    it.only('should delete a trail and respond with 200', () => {
+      return mockUser.mockOne()
+        .then(userData => {
+          tempUserData = userData;
+          return superagent.post(`${APP_URL}/api/trails`)
+            .set('Authorization', `Bearer ${tempUserData.token}`)
+            .field('trailName', 'trail name')
+            .field('difficulty', 'difficulty')
+            .field('type', 'type')
+            .field('distance', 'distance')
+            .field('elevation', 'elevation')
+            .field('lat', 'number1')
+            .field('long', 'number2')
+            .field('zoom', 'number3')
+            .attach('image', `${__dirname}/assets/map.png`);
+        })
+        .then(trail => {
+          return superagent.delete(`${APP_URL}/api/trails/trail name`)
+            .set('Authorization', `Bearer ${tempUserData.token}`)
+            .then(res => {
+              expect(res.status).toEqual(200);
             });
         });
     });
