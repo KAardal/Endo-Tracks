@@ -32,7 +32,7 @@ Users will also be able to upload a photo, write a comment, and rate the trail.
 --------
 ### Architecture
 ![image of architecture]
-(https://drive.google.com/file/d/0ByEi7DgDI5yXOFFFdVJENGRONnM/view?usp=sharing)
+(https://github.com/KAardal/endo-tracks/blob/master/test/assets/EndoTracks-architecture.png)
 ---
 ### Technologies:
 * node.js server
