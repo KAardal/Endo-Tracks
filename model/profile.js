@@ -7,7 +7,7 @@ const profileSchema = mongoose.Schema({
   userName: {type: String, required: true, unique: true},
   skillLevel: {type: String},
   ridingStyle: {type: String},
-  photoURI: {type: String},
+  avatarURI: {type: String},
 });
 
 module.exports = mongoose.model('profile', profileSchema);

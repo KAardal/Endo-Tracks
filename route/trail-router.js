@@ -37,6 +37,9 @@ trailRouter.get('/api/trails', (req, res, next) => {
 
 trailRouter.put('/api/trails',  bearerAuth, s3Upload('image'), (req, res, next) => {
   console.log('hit PUT /api/trails');
+
+  req.body.mapURI = req.s3Data.Location;
+
   let options = {
     new: true,
     runValidators: true,
