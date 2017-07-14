@@ -27,9 +27,9 @@ trailRouter.post('/api/trails', bearerAuth, s3Upload('image'),
       .catch(next);
   });
 
-trailRouter.get('/api/trails', (req, res, next) => {
+trailRouter.get('/api/trails/:trailName', (req, res, next) => {
   console.log('hit GET /api/trails');
-  Trail.findOne(req.body)
+  Trail.findOne({trailName: req.params.trailName})
     .then(trail => res.json(trail))
     .catch(next);
 });

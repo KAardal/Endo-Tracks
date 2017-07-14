@@ -8,18 +8,21 @@ const s3Upload = require('../lib/s3-upload-middleware.js');
 
 const profileRouter = module.exports = new Router();
 
-profileRouter.get('/api/profiles', jsonParser, (req, res, next) => {
+profileRouter.get('/api/profiles/:userName', jsonParser, (req, res, next) => {
   console.log('Hit profile GET route');
 
-  if (req.body.userName) {
-    return Profile.find({userName: req.body.userName})
-      .then(profile => {
-        if (profile.length < 1) return next(new Error('not found: no profile by that username'));
+  return Profile.findOne({userName: req.params.userName})
+    .then(profile => {
 
-        return res.send(profile);
-      })
-      .catch(next);
-  }
+      if (!profile) return next(new Error('not found: no profile by that username'));
+
+      return res.send(profile);
+    })
+    .catch(next);
+});
+
+profileRouter.get('/api/profiles', jsonParser, (req, res, next) => {
+  console.log('Hit GET all profiles route');
   return Profile.find({})
     .then(profiles => {
       if (profiles.length < 1) return next(new Error('not found: no profiles exist'));
