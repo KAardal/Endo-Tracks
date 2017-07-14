@@ -1,9 +1,9 @@
 # **EndoTracks: RESTful API**
 
 ## Team:
-* **Amanda Koster** makes visual sense of mental spaghetti. Hailing from a visual content and creative background, she is addicted to the wizardry of code. She leverages her creative, visual background and Full-Stack JavaScript dev skills to bridge design, UX and dev.
+* **Amanda Koster** makes visual sense of mental spaghetti. Hailing from a visual content and creative background, she is addicted to the wizardry of code. She leverages her creative background and Full-Stack JavaScript dev skills to bridge design, UX and dev.
 * **Jeff Ford** is a native of Aberdeen, WA. He spent several years working in politics in Washington state, and Washington, DC. He is a graduate of the University of Washington, and spent 13 years in the Army Reserves. In his most recent role, Jeff served as company commander of a logistics unit during a deployment to Afghanistan.
-* **Kyle Aardal** is a restaurateur, a Coast Guard Veteran turned software developer. He maneuvers his entrepreneurial spirit and leadership muscle head on into insurmountable puzzles and pesky bugs.
+* **Kyle Aardal** is a restaurateur and a Coast Guard Veteran turned software developer. He maneuvers his entrepreneurial spirit and leadership muscle head on into insurmountable puzzles and pesky bugs.
 * **Scott Mccoy** is a marketer, artificer, and a Full-Stack Javascript developer. He thrives off of the creativity and analytical logic that software development brings about. He’s looking to change the world, one line of code at a time.
 
 ------------
@@ -33,7 +33,10 @@ Users will also be able to upload a photo, write a comment, and rate the trail.
 --------
 ### Architecture
 ![diagram of Endo Tracks API architecture]
-(endo-tracks/test/assets/EndoTracks-architecture.png)
+(./test/assets/EndoTracks-architecture.png)
+
+[![diagram of Endo Tracks API architecture]
+(https://github.com/KAardal/endo-tracks/blob/master/test/assets/EndoTracks-architecture.png)]
 
 ---
 ### Technologies:
