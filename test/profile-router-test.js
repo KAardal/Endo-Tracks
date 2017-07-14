@@ -44,12 +44,12 @@ describe('Testing Profile /api/profiles routes', () => {
         };
         return User.create(userData)
           .then(() => {
-            return superagent.get(`${APP_URL}/api/profiles`)
+            return superagent.get(`${APP_URL}/api/profiles/${userData.userName}`)
               .send({userName: userData.userName})
               .then(res => {
-                expect(res.body[0].userName).toEqual(userData['userName']);
-                expect(res.body[0]._id).toExist();
-                expect(res.body[0].userID).toExist();
+                expect(res.body.userName).toEqual(userData['userName']);
+                expect(res.body._id).toExist();
+                expect(res.body.userID).toExist();
               });
           });
       });
@@ -63,8 +63,7 @@ describe('Testing Profile /api/profiles routes', () => {
         };
         return User.create(userData)
           .then(() => {
-            return superagent.get(`${APP_URL}/api/profiles`)
-              .send({userName: `badusername`})
+            return superagent.get(`${APP_URL}/api/profiles/badusername`)
               .catch(err => {
                 expect(err.status).toEqual(404);
               });

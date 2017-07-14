@@ -114,10 +114,11 @@ describe('testing trail router', () => {
             .field('zoom', 'number3')
             .attach('image', `${__dirname}/assets/map.png`);
         })
-        .then((res) => {
-          return superagent.get(`${APP_URL}/api/trails`)
-            .send({trailName: 'trail name'})
-            .then(res => expect(res.status).toEqual(200));
+        .then((trail) => {
+          return superagent.get(`${APP_URL}/api/trails/${trail.body.trailName}`)
+            .then(res => {
+              expect(res.status).toEqual(200);
+            });
         });
     });
     it('should respond with a 404', () => {
@@ -203,7 +204,7 @@ describe('testing trail router', () => {
             .attach('image', `${__dirname}/assets/map.png`);
         })
         .then(trail => {
-          return superagent.delete(`${APP_URL}/api/trails/trail name`)
+          return superagent.delete(`${APP_URL}/api/trails/${trail.body.trailName}`)
             .set('Authorization', `Bearer ${tempUserData.token}`)
             .then(res => {
               expect(res.status).toEqual(200);
@@ -228,7 +229,7 @@ describe('testing trail router', () => {
             .attach('image', `${__dirname}/assets/map.png`);
         })
         .then(trail => {
-          return superagent.delete(`${APP_URL}/api/trails/bad name`)
+          return superagent.delete(`${APP_URL}/api/trails/badname`)
             .set('Authorization', `Bearer ${tempUserData.token}`)
             .catch(res => {
               expect(res.status).toEqual(500);
