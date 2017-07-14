@@ -31,6 +31,7 @@ describe('testing trail router', () => {
           .field('zoom', 'number3')
           .attach('image', `${__dirname}/assets/map.png`);
       }).then(res => {
+        console.log('res.boyd: ', res.body);
         expect(res.status).toEqual(200);
         expect(res.body.trailName).toEqual('trail name');
         expect(res.body.difficulty).toEqual('difficulty');
