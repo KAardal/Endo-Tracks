@@ -186,7 +186,7 @@ describe('testing trail router', () => {
   });
 
   describe('Testing DELETE /api/trails', () => {
-    it.only('should delete a trail and respond with 200', () => {
+    it('should delete a trail and respond with 200', () => {
       return mockUser.mockOne()
         .then(userData => {
           tempUserData = userData;
@@ -210,5 +210,56 @@ describe('testing trail router', () => {
             });
         });
     });
+
+    it('should respond with 500', () => {
+      return mockUser.mockOne()
+        .then(userData => {
+          tempUserData = userData;
+          return superagent.post(`${APP_URL}/api/trails`)
+            .set('Authorization', `Bearer ${tempUserData.token}`)
+            .field('trailName', 'trail name')
+            .field('difficulty', 'difficulty')
+            .field('type', 'type')
+            .field('distance', 'distance')
+            .field('elevation', 'elevation')
+            .field('lat', 'number1')
+            .field('long', 'number2')
+            .field('zoom', 'number3')
+            .attach('image', `${__dirname}/assets/map.png`);
+        })
+        .then(trail => {
+          return superagent.delete(`${APP_URL}/api/trails/bad name`)
+            .set('Authorization', `Bearer ${tempUserData.token}`)
+            .catch(res => {
+              expect(res.status).toEqual(500);
+            });
+        });
+    });
+
+    it('should respond with 404', () => {
+      return mockUser.mockOne()
+        .then(userData => {
+          tempUserData = userData;
+          return superagent.post(`${APP_URL}/api/trails`)
+            .set('Authorization', `Bearer ${tempUserData.token}`)
+            .field('trailName', 'trail name')
+            .field('difficulty', 'difficulty')
+            .field('type', 'type')
+            .field('distance', 'distance')
+            .field('elevation', 'elevation')
+            .field('lat', 'number1')
+            .field('long', 'number2')
+            .field('zoom', 'number3')
+            .attach('image', `${__dirname}/assets/map.png`);
+        })
+        .then(trail => {
+          return superagent.delete(`${APP_URL}/api/badroute`)
+            .set('Authorization', `Bearer ${tempUserData.token}`)
+            .catch(res => {
+              expect(res.status).toEqual(404);
+            });
+        });
+    });
+
   });
 });
