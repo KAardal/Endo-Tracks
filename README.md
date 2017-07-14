@@ -1,24 +1,24 @@
 # **EndoTracks: RESTful API**
 
-* **Amanda Koster** makes visual sense of mental spaghetti. Hailing from a visual content and creative background, she is addicted to the wizardry of code. She leverages her creative, visual background and Full-Stack JavaScript dev skills to squash inefficiencies between design, UX and dev.
+## Team:
+* **Amanda Koster** makes visual sense of mental spaghetti. Hailing from a visual content and creative background, she is addicted to the wizardry of code. She leverages her creative, visual background and Full-Stack JavaScript dev skills to bridge design, UX and dev.
 * **Jeff Ford** is a native of Aberdeen, WA. He spent several years working in politics in Washington state, and Washington, DC. He is a graduate of the University of Washington, and spent 13 years in the Army Reserves. In his most recent role, Jeff served as company commander of a logistics unit during a deployment to Afghanistan.
-* **Kyle Aardal** is a restaurateur, a Coast Guard Veteran turned software developer. He maneuvers his entrepreneurial spirit and leadership muscle head on into insurmountable puzzles  and relentless bugs.
+* **Kyle Aardal** is a restaurateur, a Coast Guard Veteran turned software developer. He maneuvers his entrepreneurial spirit and leadership muscle head on into insurmountable puzzles and pesky bugs.
 * **Scott Mccoy** is a marketer, artificer, and a Full-Stack Javascript developer. He thrives off of the creativity and analytical logic that software development brings about. He’s looking to change the world, one line of code at a time.
 
 ------------
 ## Overview
 The Pacific Northwest is rich with excellent bike trails for all types of riders, but the riding community is currently lacking a reliable resource to learn about trails prior to riding them.
 
-Endo Tracks fills that gap by allowing riders to share their experiences with the community.  This application allows riders to maximize their time, and removes the guesswork when checking out new trails.
+EndoTracks fills that gap by allowing riders to share their experiences with the community.  This application allows riders to maximize their time, and removes the guesswork when checking out new trails.
 
-Endo Tracks provides an infrastructure and data persistence that can be easily consumed by applications (both client and web based) using the reliable and proven standards of a RESTful API. By providing this API and supporting infrastructure, we are encouraging developers to create applications that can provide value to the mountain bike community.
+EndoTracks provides an infrastructure and data persistence that can be easily consumed by applications (both client and web based) using the reliable and proven standards of a RESTful API. By providing this API and supporting infrastructure, we are encouraging developers to create applications that can add value to the mountain bike community.
 
-This RESTful API provides the necessary back-end infrastructure and functionality to create, get, update and delete data related to mountain bike trails.
-When a user creates an account, you can use the User model for authorization purposes on CRUD operations for the Profile and Trail models.
+When a user creates an account, you can use the User model for authorization purposes on CRUD operations for the Profile and Trail models. EndoTracks has the necessary back-end infrastructure and functionality to create, get, update and delete data related to mountain bike trails.
 
 ------
 ### Current Version (1.0.0)
-The current version of Endo Tracks allows users to:
+The current version of EndoTracks allows users to:
 Sign up for an account with a unique username, e-mail, and password.
 
 Update a profile that includes their skill level, riding style, and profile avatar.
@@ -26,13 +26,13 @@ Update a profile that includes their skill level, riding style, and profile avat
 
 --------
 ### Future Releases
-The next release of Endo Tracks will add a user comments feature. Once a trail is added, users will be able to share their personal experiences with the community in comment fields.
+The next release of EndoTracks will add a user comments feature. Once a trail is added, users will be able to share their personal experiences with the community in comment fields.
 
 Users will also be able to upload a photo, write a comment, and rate the trail.
 
 --------
 ### Architecture
-![image of architecture]
+![diagram of Endo Tracks API architecture]
 (https://github.com/KAardal/endo-tracks/blob/master/test/assets/EndoTracks-architecture.png)
 ---
 ### Technologies:
@@ -83,7 +83,7 @@ Run tests - npm test
 
 --------
 #### How a new user would sign up:
-###### Request: POST
+##### Request: POST
 Route to pass data to: https://endo-tracks.herokuapp.com/api/users/signup
 **Required Data:**
 * userName: ‘<new user>’ - a unique string
