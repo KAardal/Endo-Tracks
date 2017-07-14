@@ -1,5 +1,4 @@
-![]()
-# **EdnoTracks RESTful API**
+# **EdnoTracks: RESTful API**
 
 * **Amanda Koster** makes visual sense of mental spaghetti. Hailing from a visual content and creative background, she is addicted to the wizardry of code. She leverages her creative, visual background and full-stack JavaScript skills to squash inefficiencies between design UX and dev.
 * **Jeff Ford** is a native of Aberdeen, WA. He spent several years working in politics in Washington state, and Washington, DC. He is a graduate of the University of Washington, and spent 13 years in the Army Reserves. In his most recent role, Jeff served as company commander of a logistics unit during a deployment to Afghanistan.
@@ -33,7 +32,7 @@ Users will also be able to upload a photo, write a comment, and rate the trail.
 --------
 ### Architecture
 ![image of architecture]
-(https://drive.google.com/open?id=0ByEi7DgDI5yXOFFFdVJENGRONnM)
+(https://drive.google.com/file/d/0ByEi7DgDI5yXOFFFdVJENGRONnM/view?usp=sharing)
 ---
 ### Technologies:
 * node.js server
@@ -154,8 +153,6 @@ const userSchema = mongoose.Schema({
 ### GET /api/users/login
 This route allows existing users to return to the application and access all of its features.
 
-Required Data:
-*
 
 #### DELETE /api/users/delete
 
@@ -170,9 +167,6 @@ const profileSchema = mongoose.Schema({
 	photoURI: {type: String},
 });
 ```
-
-
-
 ------
 ### TRAILS
 ```javascript
@@ -197,7 +191,6 @@ Route to pass data to: https://endo-tracks.herokuapp.com/api/trails
 trailName: ‘trail name’ - to find the trail
 ###### Back end operations:
 Returns single trail by trailName.
-
 ### Create/Update a trail.
 Note: Authorization is required.
 ###### Request: POST / PUT
@@ -205,14 +198,14 @@ Route to pass data to: https://endo-tracks.herokuapp.com/api/trails/
 ###### Required Data:
 trailName: ‘trail name’
 ###### Optional data to update (required for POST):
-mapUIR: ‘image file from users local’ - converts to string
-Difficulty: ‘difficulty’ - string
-Type: ‘type of riding’ - a unique string
-distance: ‘distance’ - string
-Elevation: ‘ elevation’ - string
-lat: ‘lat’ - string
-Long: ‘long’ - string
-Zoom: ‘zoom’ - string
+* mapUIR: ‘image file from users local’ - converts to string
+* Difficulty: ‘difficulty’ - string
+* Type: ‘type of riding’ - a unique string
+* distance: ‘distance’ - string
+* Elevation: ‘ elevation’ - string
+* lat: ‘lat’ - string
+* Long: ‘long’ - string
+* Zoom: ‘zoom’ - string
 
 ###### Back end operations:
 Trail is returned.
